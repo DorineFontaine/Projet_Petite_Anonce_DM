@@ -2,4 +2,13 @@
     <string name="app_name">Projet_Petite_anonce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bj">Bonjour!</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="mail">Adresse mail</string>
+    <string name="phrase_inscription">Vous n\'avez pas encore de compte ? S'incrire </string>
+    <string name="phrase_mp_oublier">Mot de passe oublié ? </string>
+    <string name="inscription">S\'inscrire </string>
+    <string name="connexion">Se connecter</string>
+
+
 </resources>
