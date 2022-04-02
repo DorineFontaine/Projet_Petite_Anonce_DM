@@ -5,10 +5,11 @@
     <string name="bj">Bonjour!</string>
     <string name="pseudo">Pseudo</string>
     <string name="mail">Adresse mail</string>
-    <string name="phrase_inscription">Vous n\'avez pas encore de compte ? S'incrire </string>
-    <string name="phrase_mp_oublier">Mot de passe oublié ? </string>
+    <string name="phrase_inscription"><u>Vous n\'avez pas encore de compte ? <b>S\'incrire</b></u> </string>
+    <string name="phrase_mp_oublier"><u>Mot de passe oublié ? </u></string>
     <string name="inscription">S\'inscrire </string>
     <string name="connexion">Se connecter</string>
+    <string name="mdp">Mot de passe</string>
 
 
 </resources>
