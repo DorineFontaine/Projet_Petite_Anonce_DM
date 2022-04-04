@@ -10,6 +10,9 @@
     <string name="inscription">S\'inscrire </string>
     <string name="connexion">Se connecter</string>
     <string name="mdp">Mot de passe</string>
+    <string name="pa">Petite Anonce</string>
+    <string name="favorie">Favorie</string>
+    <string name="filtre">Filtre</string>
 
 
 </resources>

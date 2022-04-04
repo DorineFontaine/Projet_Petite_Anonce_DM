@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="saumon">#FF6663</color>
+    <color name="bleu">#5BC0BE</color>
+
 </resources>

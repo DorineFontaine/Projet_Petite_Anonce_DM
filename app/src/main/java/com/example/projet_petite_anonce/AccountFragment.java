@@ -27,19 +27,7 @@ public class AccountFragment extends Fragment {
         inscription = view.findViewById(R.id.inscription);
 
       //  page_inscription = new Intent(getActivity(), InscriptionActivity.class);
-        inscription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              //  startActivity(page_inscription);
 
-               /* FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();*/
-
-
-
-            }
-        });
         return view;
     }
 }
