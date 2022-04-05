@@ -16,5 +16,38 @@
     <string name="anonce">Mes Annonces</string>
     <string name="message">Mes Messages</string>
 
-
+    <string name="titreAdd">Déposer votre annonce</string>
+    <string name="titreEnonce">Quel est le titre de l\'annonce ?</string>
+    <string name="typeEnonce">Quel est le type de votre bien :</string>
+    <string name="etatEnonce">Identifiez l\'état de votre bien :</string>
+    <string name="neuf">Neuf</string>
+    <string name="tresbon">Très bon état</string>
+    <string name="bon">Bon état</string>
+    <string name="satif">Satisfaisant</string>
+    <string name="descriptionEnonce">Description du bien :</string>
+    <string name="titre">Titre</string>
+    <string name="categorie">Choisir la catégorie</string>
+    <string name="descriptionExemple">Une belle description avec 500 caractères maximum :)</string>
+    <string name="prixEnonce">Renseignez le prix du bien :</string>
+    <string name="prix">Prix en €</string>
+    <string name="localisationEnonce">Renseignez la localisation du bien :</string>
+    <string name="localisationExemple">Adresse, ville ou code postal</string>
+    <string name="valider">Valider</string>
+    <string name="contacter">Contacter</string>
+    <string name="details">Détails</string>
+    <string name="etat">Etat</string>
+    <string name="partager">Partager</string>
+    <string name="signaler">Signaler</string>
+    <string name="favories">Favories</string>
+    <string name="date">Aujourd\'hui à 13:45</string>
+    <string name="testNbImage">1/2</string>
+    <string name="type">Type</string>
+    <string-array name="categorie">
+        <item>Livres</item>
+        <item>Décoration</item>
+        <item>Véhicule</item>
+        <item>Musique</item>
+        <item>Immobilier</item>
+        <item>Multimédia</item>
+    </string-array>
 </resources>
