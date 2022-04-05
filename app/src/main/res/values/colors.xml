@@ -9,5 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="saumon">#FF6663</color>
     <color name="bleu">#5BC0BE</color>
+    <color name="noir_transparent">#9000</color>
+    <color name="greyTransparent">#9000</color>
+    <color name="grey">#9000</color>
+
 
 </resources>

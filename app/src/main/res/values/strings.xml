@@ -50,4 +50,6 @@
         <item>Immobilier</item>
         <item>Multimédia</item>
     </string-array>
+    <string name="sup">Supprimez !</string>
+    <string name="modif">Modifiez !</string>
 </resources>
