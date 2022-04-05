@@ -5,22 +5,23 @@
     android:layout_height="match_parent"
     android:background="@drawable/anonce"
     android:orientation="vertical"
-    tools:context=".MessageFragment">
+    tools:context=".AnnonceFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="@string/message"
+        android:text="@string/anonce"
         android:textColor="@color/white"
         android:textSize="24sp" />
 
     <ListView
-        android:id="@+id/listview_message"
+        android:id="@+id/list_view_anonce"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="75dp" />
 
 </LinearLayout>

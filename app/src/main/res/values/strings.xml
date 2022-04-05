@@ -13,6 +13,8 @@
     <string name="pa">Petite Anonce</string>
     <string name="favorie">Favorie</string>
     <string name="filtre">Filtre</string>
+    <string name="anonce">Mes Annonces</string>
+    <string name="message">Mes Messages</string>
 
 
 </resources>
