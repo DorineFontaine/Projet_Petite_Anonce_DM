@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AnnounceFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            >
+            <ImageView
+                android:id="@+id/imageAnnonce"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_bureautest_background"
+                android:contentDescription="Photo du bien de l annonce" />
+
+            <Button
+                android:id="@+id/nombreImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/imageAnnonce"
+                android:layout_alignBottom="@+id/imageAnnonce"
+                android:drawableLeft="@android:drawable/ic_menu_camera"
+                android:drawableTint="@color/white"
+                android:backgroundTint="@color/greyTransparent"
+                android:text="@string/testNbImage"
+                android:textColor="@color/white"
+                app:cornerRadius="50dp"
+                android:textSize="11sp"
+                />
+
+            <TextView
+                android:id="@+id/titre"
+                android:layout_below="@+id/imageAnnonce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/titre"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/etoile"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/titre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_star_24"
+                android:background="@null"
+                android:contentDescription="@string/favories"
+                android:onClick="suppText"
+                tools:ignore="UsingOnClickInXml" />
+
+            <TextView
+                android:id="@+id/prix"
+                android:textColor="@color/black"
+                android:layout_below="@+id/titre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prix" />
+
+
+            <TextView
+                android:id="@+id/date"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:layout_below="@+id/prix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date" />
+
+
+            <View
+                android:id="@+id/viewDivider"
+                android:layout_below="@+id/date"
+                style="@style/Divider.Horizontal"/>
+
+            <TextView
+                android:id="@+id/details"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:layout_below="@+id/viewDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/details" />
+
+
+            <TextView
+                android:id="@+id/description"
+                android:textColor="@color/black"
+                android:layout_below="@+id/details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/descriptionExemple" />
+
+            <TextView
+                android:id="@+id/etat"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:layout_below="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/etat" />
+
+            <TextView
+                android:id="@+id/etatAnnonce"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/etat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/etat" />
+
+            <TextView
+                android:id="@+id/categorie"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_below="@+id/etatAnnonce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/categorie" />
+
+            <TextView
+                android:id="@+id/categorieAnnonce"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:layout_below="@+id/categorie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/categorie" />
+
+            <View
+                android:id="@+id/viewDivider2"
+                android:layout_below="@+id/categorieAnnonce"
+                style="@style/Divider.Horizontal"/>
+
+            <TextView
+                android:id="@+id/localisation"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginVertical="10dp"
+                android:layout_below="@+id/viewDivider2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/localisationExemple" />
+
+            <View
+                android:id="@+id/viewDivider3"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/localisation"
+                style="@style/Divider.Horizontal"/>
+
+            <Button
+                android:id="@+id/partager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="?attr/actionModeShareDrawable"
+                android:background="@android:color/transparent"
+                android:text="@string/partager"
+                android:drawableTint="@color/grey"
+                android:textColor="@color/grey"
+                android:layout_below="@+id/viewDivider3"
+                android:textSize="11sp"
+                />
+
+            <Button
+                android:id="@+id/signaler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/partager"
+                android:drawableLeft="?android:attr/alertDialogIcon"
+                android:drawableTint="@color/grey"
+                android:background="@android:color/transparent"
+                android:text="@string/signaler"
+                android:textColor="@color/grey"
+                android:textSize="11sp"
+                />
+
+
+            <Button
+                android:id="@+id/btn_contacter"
+                android:layout_below="@id/signaler"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/saumon"
+                android:text="@string/contacter"
+                app:cornerRadius="50dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</FrameLayout>
