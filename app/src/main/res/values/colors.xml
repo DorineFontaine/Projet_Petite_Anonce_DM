@@ -9,7 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="saumon">#FF6663</color>
     <color name="bleu">#5BC0BE</color>
-    <color name="grey">#CDCDCD</color>
-    <color name="greyTransparent">#99CDCDCD</color>
-    <color name="blackTransparent">#99000000</color>
+
 </resources>

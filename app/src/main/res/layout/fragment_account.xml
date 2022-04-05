@@ -17,7 +17,7 @@
         android:foregroundGravity="center"
         android:gravity="center_horizontal"
         android:text="@string/bj"
-        android:textColor="@color/black"
+        android:textColor="@color/noir_transparent"
         android:textSize="24sp" />
 
     <EditText
@@ -30,7 +30,7 @@
         android:drawablePadding="4dp"
         android:elevation="6dp"
         android:ems="10"
-        android:hint="@string/pseudo"
+        android:hint="@string/mail"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:padding="8dp" />
@@ -45,10 +45,11 @@
         android:drawablePadding="4dp"
         android:elevation="6dp"
         android:ems="10"
-        android:hint="@string/mail"
+        android:hint="@string/mdp"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:password="true" />
 
     <TextView
         android:id="@+id/textView5"
@@ -75,6 +76,8 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:gravity="center"
+        android:minHeight="48dp"
+        android:onClick="redirection"
         android:text="@string/phrase_inscription"
         android:textColor="@color/cardview_dark_background" />
 

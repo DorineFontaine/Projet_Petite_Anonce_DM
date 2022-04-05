@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projet_Petite_anonce">
         <activity
-            android:name=".InscriptionActivity"
-            android:exported="false" />
-        <activity
             android:name=".Bottom_Ng_Activity"
             android:exported="false" />
         <activity

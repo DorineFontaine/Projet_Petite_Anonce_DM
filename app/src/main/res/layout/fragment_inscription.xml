@@ -18,7 +18,7 @@
         android:foregroundGravity="center"
         android:gravity="center_horizontal"
         android:text="@string/bj"
-        android:textColor="@color/black"
+        android:textColor="@color/noir_transparent"
         android:textSize="24sp" />
 
     <EditText
@@ -64,7 +64,8 @@
         android:hint="@string/mdp"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:password="true" />
 
     <Button
         android:id="@+id/btn_connexion"

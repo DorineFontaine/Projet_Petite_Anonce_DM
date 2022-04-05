@@ -67,6 +67,14 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
                 return false;
             }
+
         });
+
+
+    }
+    public void redirection (View view){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionFragment()).commit();
+
+
     }
 }
