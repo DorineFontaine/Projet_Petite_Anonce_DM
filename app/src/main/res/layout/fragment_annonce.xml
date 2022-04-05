@@ -15,7 +15,7 @@
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="@string/anonce"
-        android:textColor="@color/white"
+        android:textColor="@color/greyTransparent"
         android:textSize="24sp" />
 
     <ListView

@@ -15,6 +15,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class Bottom_Ng_Activity extends AppCompatActivity {
 
+    //Activité principale
+    //Cette activité gére les changements de fragment au niveau de la bare de menu
+
     BottomNavigationView bottomNavigationView;
 
 
@@ -26,6 +29,8 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
 
+        //Creation d'un fragment
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
@@ -35,10 +40,11 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
 
 
-
+        //En fonction de l'item de la barre de menu selectionné, on change de fragment
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch(item.getItemId()){
                     case R.id.nav_home:
 

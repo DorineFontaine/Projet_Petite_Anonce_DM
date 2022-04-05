@@ -11,7 +11,7 @@
     <string name="connexion">Se connecter</string>
     <string name="mdp">Mot de passe</string>
     <string name="pa">Petite Anonce</string>
-    <string name="favorie">Favorie</string>
+    <string name="favorie">Favoris</string>
     <string name="filtre">Filtre</string>
     <string name="anonce">Mes Annonces</string>
     <string name="message">Mes Messages</string>
@@ -52,4 +52,5 @@
     </string-array>
     <string name="sup">Supprimez !</string>
     <string name="modif">Modifiez !</string>
+    <string name="bienvenu">Bienvenue</string>
 </resources>

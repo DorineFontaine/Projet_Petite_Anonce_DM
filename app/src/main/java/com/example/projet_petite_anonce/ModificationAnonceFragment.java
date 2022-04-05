@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 
 public class ModificationAnonceFragment extends Fragment {
 
+    //Recevoir les modifications de l'utilisateur
+    //Modifier l'anonce
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

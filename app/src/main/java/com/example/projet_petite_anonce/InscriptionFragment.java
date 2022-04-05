@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 
 public class InscriptionFragment extends Fragment {
 
+    //Recoit les informations sur le compte de l'utilisateur : Adresse Mail, Pseudo, etc ..
+    //Stocke l'information dans une BDD
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

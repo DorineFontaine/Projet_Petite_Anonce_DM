@@ -6,14 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.LinearLayout;
-
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-    private static int TIME_OUT = 4000;
 
+    //Page de chargement
+    //Affiche la page principale aprés 4 secondes
+
+    private static int TIME_OUT = 4000;
     private Handler mHandler = new Handler();
 
     @SuppressLint("ResourceAsColor")
@@ -22,10 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LinearLayout page_anonce = findViewById(R.id.page_annonce);
-        Intent page_suivant = new Intent(this, Bottom_Ng_Activity.class);
 
-        // rediriger vers le menu principale apres quelque secondes
+
+        // Redirection vers la page principale après quelques secondes
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -35,19 +34,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //met en pause
+        //Mise en pause
         mHandler.postDelayed(runnable, 4000); //4 seconds
 
 
-       /* page_anonce.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(page_suivant);
-
-            }
-        });*/
-
-       // startActivity(page_suivant);
 
     }
 }

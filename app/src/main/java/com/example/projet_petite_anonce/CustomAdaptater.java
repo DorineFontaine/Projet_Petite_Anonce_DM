@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.example.projet_petite_anonce.R;
 
 public class CustomAdaptater extends BaseAdapter {
+
+    //Classe qui nous permet d'implementer nos liste
+
     Context context;
 
 

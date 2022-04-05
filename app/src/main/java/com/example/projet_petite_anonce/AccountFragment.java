@@ -26,6 +26,16 @@ public class AccountFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_account, container, false);
         inscription = view.findViewById(R.id.inscription);
 
+        inscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionFragment()).commit();
+
+            }
+        });
+
       //  page_inscription = new Intent(getActivity(), InscriptionActivity.class);
 
         return view;

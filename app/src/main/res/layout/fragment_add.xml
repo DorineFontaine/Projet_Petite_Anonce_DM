@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFragment"
-    android:background="@drawable/fond1"
+    android:background="@drawable/petite_anonce_logo"
     >
     <ScrollView
         android:layout_width="match_parent"
