@@ -153,11 +153,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/localisationExemple" />
+          
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_below="@+id/localisation"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="200dp"/>
 
             <View
                 android:id="@+id/viewDivider3"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@+id/localisation"
+                android:layout_below="@+id/map"
                 style="@style/Divider.Horizontal"/>
 
             <Button
