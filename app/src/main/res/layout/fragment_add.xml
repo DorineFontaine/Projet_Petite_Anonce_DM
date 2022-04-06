@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_margin="20dp"
             >
             <TextView
                 android:id="@+id/titreAdd"
@@ -40,7 +40,7 @@
             <EditText
                 android:id="@+id/editTextTitre"
                 android:layout_below="@+id/titreEnonce"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:minHeight="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
@@ -67,7 +67,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dropdown_menu"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/typeEnonce"
                 app:boxCornerRadiusBottomEnd="50dp"
@@ -143,6 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/descriptionEnonce" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/containerDescripiton"
                 android:layout_width="match_parent"
@@ -152,9 +153,9 @@
                 app:counterEnabled="true"
                 android:background="@null"
                 app:counterMaxLength="500">
+
                 <EditText
                     android:id="@+id/editTextDescription"
-                    android:layout_marginRight="18dp"
                     android:layout_below="@+id/descriptionEnonce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,6 +168,7 @@
                     android:inputType="textMultiLine"
                     android:padding="8dp"
                     android:maxLength="500"
+                    android:autofillHints=""
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -184,9 +186,8 @@
 
             <EditText
                 android:id="@+id/editTextPrix"
-                android:layout_marginRight="18dp"
                 android:layout_below="@+id/prixEnonce"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:minHeight="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
@@ -198,6 +199,7 @@
                 android:inputType="number"
                 android:padding="8dp"
                 android:maxLength="500"
+                android:autofillHints=""
                 />
 
             <TextView
@@ -211,29 +213,51 @@
                 android:layout_height="wrap_content"
                 android:text="@string/localisationEnonce" />
 
+
+
+
             <EditText
-                android:id="@+id/editTextLocalisation"
-                android:layout_marginRight="18dp"
-                android:layout_below="@+id/localisationEnonce"
-                android:layout_width="300dp"
-                android:minHeight="48dp"
+                    android:id="@+id/editTextLocalisation"
+                    android:layout_below="@+id/localisationEnonce"
+                    android:layout_width="match_parent"
+                    android:minHeight="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/edittext"
+                    android:drawablePadding="4dp"
+                    android:elevation="6dp"
+                    android:ems="10"
+                    android:hint="@string/localisationExemple"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:autofillHints=""
+                    android:maxLength="500"
+                    />
+            <Button
+                android:id="@+id/btn_localisation"
+                android:layout_margin="10dp"
+                android:layout_below="@id/editTextLocalisation"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:background="@drawable/edittext"
-                android:drawablePadding="4dp"
-                android:elevation="6dp"
-                android:ems="10"
-                android:hint="@string/localisationExemple"
-                android:inputType="text"
-                android:padding="8dp"
-                android:maxLength="500"
-                />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:backgroundTint="@color/saumon"
+                android:text="@string/localiser"
+                app:cornerRadius="50dp" />
 
 
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_below="@+id/btn_localisation"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="300dp"/>
 
             <Button
                 android:id="@+id/btn_valider"
-                android:layout_below="@id/editTextLocalisation"
+                android:layout_below="@id/map"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
