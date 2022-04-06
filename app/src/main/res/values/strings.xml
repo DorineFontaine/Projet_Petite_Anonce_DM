@@ -50,6 +50,7 @@
         <item>Immobilier</item>
         <item>Multimédia</item>
     </string-array>
+    <string name="localiser">Localiser l\'annonce</string>
     <string name="sup">Supprimez !</string>
     <string name="modif">Modifiez !</string>
     <string name="bienvenu">Bienvenue</string>
