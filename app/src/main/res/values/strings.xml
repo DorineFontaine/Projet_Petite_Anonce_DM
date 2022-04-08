@@ -54,4 +54,14 @@
     <string name="sup">Supprimez !</string>
     <string name="modif">Modifiez !</string>
     <string name="bienvenu">Bienvenue</string>
+        <string name="annonce">Annonces</string>
+    <string name="avis">Avis</string>
+    <string name="modif">Modifier mon profil</string>
+    <string name="mesannonces">Mes annonces</string>
+    <string name="notif">Notification</string>
+    <string name="aide">Aide, FAQ, CGU</string>
+    <string name="deconnexion">Se déconnecter</string>
+    <string name="imageProfil">Image du profil</string>
+    <string name="revert">Revenir en arrière</string>
+    <string name="particulier">Particulier</string>
 </resources>
