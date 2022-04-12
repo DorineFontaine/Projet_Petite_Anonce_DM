@@ -3,13 +3,19 @@ package projetAndroid.petitesannonces;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.projet_petite_anonce.R;
 
 
 public class ProfilFragment extends Fragment {
+    Button modifProfil;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +61,17 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profil, container, false);
+        View view = inflater.inflate(R.layout.fragment_profil, container, false);
+        modifProfil = view.findViewById(R.id.btn_modif);
+        modifProfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new projetAndroid.petitesannonces.ModifProfil()).commit();
+            }
+        });
+
+        return view;
     }
 }

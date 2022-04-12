@@ -2,6 +2,7 @@ package com.example.projet_petite_anonce;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -38,7 +39,7 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_ng);
 
-        
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
 
@@ -46,8 +47,7 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
 
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
@@ -59,26 +59,26 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_home:
 
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
 
                         break;
                     case R.id.nav_account:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AccountFragment()).commit();
                         break;
                     case R.id.nav_favorites:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FavoritesFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoritesFragment()).commit();
 
                         break;
                     case R.id.nav_message:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessageFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessageFragment()).commit();
 
                         break;
                     case R.id.nav_add:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AddFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddFragment()).commit();
 
                         break;
 
@@ -92,10 +92,11 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
 
     }
-    public void redirection (View view){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionFragment()).commit();
+
+    public void redirection(View view) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InscriptionFragment()).commit();
     }
-    
+
     /**
      * Demander la permission afin d'accéder aux fichiers du téléphone
      */
@@ -139,4 +140,5 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
             editor.putBoolean(Manifest.permission.INTERNET, true);
             editor.apply();
         }
+    }
 }
