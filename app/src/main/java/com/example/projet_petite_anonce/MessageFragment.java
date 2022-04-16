@@ -1,5 +1,7 @@
 package com.example.projet_petite_anonce;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
@@ -44,12 +48,93 @@ public class MessageFragment extends Fragment {
         simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                LinearLayout affiche = view.findViewById(R.id.linearLayout2);
+                LinearLayout supprime = view.findViewById(R.id.supprimer);
+                ImageView imageView = view.findViewById(R.id.icon);
 
-                //On transmet le prix le titre pour faire un affichage dynamique du coté de DiscussFragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DiscussFragment(titre[i],temps[i],nomAcheteur[i],photo[i])).commit();
-            }
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DiscussFragment(titre[i],temps[i],nomAcheteur[i],photo[i])).commit();
+
+
+                    }
+                });
+
+                affiche.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DiscussFragment(titre[i],temps[i],nomAcheteur[i],photo[i])).commit();
+
+                    }
+                });
+
+                supprime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                        alertDialogBuilder.setMessage(R.string.suppressionMessage);
+                        alertDialogBuilder.setPositiveButton(R.string.oui,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // la tache à executer une fois le bouton Oui est appuyé
+                                    }
+                                });
+
+                        alertDialogBuilder.setNegativeButton(R.string.non
+                                ,new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        // la tache à exécuter une fois le bouton est Non appuyé
+
+                                    }
+                                });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
+
+
+
+
+
+
+                        /*******************************************************************************/
+                    }
+                });
+
+            }/****/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         });
        return view;
     }

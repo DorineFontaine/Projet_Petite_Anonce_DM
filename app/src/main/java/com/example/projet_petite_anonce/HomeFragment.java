@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
@@ -52,10 +53,32 @@ public class HomeFragment extends Fragment {
         simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(photo[i],prix[i],titre[i],temps[i])).commit();
+                ImageView fav = view.findViewById(R.id.fav);
+                fav.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fav.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+
+
+                    }
+                });
+
+                LinearLayout linearLayout = view.findViewById(R.id.affiche);
+                linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(photo[i],prix[i],titre[i],temps[i])).commit();
+
+
+                    }
+                });
+
+
+
             }
         });
         return view;
@@ -65,6 +88,6 @@ public class HomeFragment extends Fragment {
     //Marquage des articles favoris (remplissage du coeur)
     //Pas fonctionnel pour le moment
     public void favoris() {
-       // favoris.setImageResource(R.drawable.ic_baseline_favorite_24);
+        favoris.setImageResource(R.drawable.ic_baseline_favorite_24);
     }
 }

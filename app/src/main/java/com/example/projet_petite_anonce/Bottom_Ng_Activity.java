@@ -93,9 +93,7 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
     }
 
-    public void redirection(View view) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InscriptionFragment()).commit();
-    }
+
 
     /**
      * Demander la permission afin d'accéder aux fichiers du téléphone
