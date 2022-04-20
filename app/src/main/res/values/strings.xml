@@ -65,6 +65,9 @@
     <string name="particulier">Particulier</string>
     <string name="suppression">Etes vous sûre de vouloir supprimer cette articles de votre liste? </string>
     <string name="suppressionMessage">Etes vous sûre de vouloir supprimer cette conversation? </string>
+    <string name="requisEmail">Email requis !</string>
+    <string name="requisMDP">Mot de passe requis !</string>
+    <string name="requisPseudo">Pseudo requis !</string>
     <string name="oui">Oui</string>
     <string name="non">Non</string>
 </resources>

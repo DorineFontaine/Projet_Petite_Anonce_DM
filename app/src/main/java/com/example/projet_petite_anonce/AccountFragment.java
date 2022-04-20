@@ -11,23 +11,53 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class AccountFragment extends Fragment {
-    Button bouton;
+    Button bouton_connexion;
 
-    TextView inscription;
+    TextView inscription, mdp_oublie;
+    EditText editText_mail, editText_mdp;
+    String mail, mdp;
     Intent page_inscription;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
+
+
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_account, container, false);
         inscription = view.findViewById(R.id.inscription);
-        bouton = view.findViewById(R.id.btn_connexion);
+        bouton_connexion = view.findViewById(R.id.btn_connexion);
+        mdp_oublie = view.findViewById(R.id.motdepasse);
+
+
+        editText_mail = view.findViewById(R.id.editText_mail);
+        editText_mdp = view.findViewById(R.id.editText2_mail);
+
+        mail = editText_mail.getText().toString();
+        mdp = editText_mdp.getText().toString();
+
+
+
+        /*****************************************AUTHENTIFICATION *********************************************/
+
+        mdp_oublie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         inscription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,7 +69,7 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        bouton.setOnClickListener(new View.OnClickListener() {
+        bouton_connexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
