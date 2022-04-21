@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
@@ -23,7 +26,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -54,6 +63,7 @@ public class AddFragment extends Fragment {
     private View view;
     private MapView map;
     private IMapController mapController;
+    FirebaseAuth mAuth;
 
     public AddFragment() {
         // Required empty public constructor
@@ -87,11 +97,69 @@ public class AddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add, container, false);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
-        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
-        autoCompleteTextView.setAdapter(arrayAdapter);
 
-        mapCreation();
+        //check if user signed in
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+
+        if(user == null){
+            //show a connexion button
+
+            //we create an relativelayout (new view)
+            RelativeLayout frameLayout = new RelativeLayout(view.getContext());
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            frameLayout.setLayoutParams(layoutParams);
+            frameLayout.setBackgroundResource(R.drawable.petite_anonce_logo);
+
+            RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams1.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            layoutParams1.addRule(RelativeLayout.CENTER_VERTICAL);
+
+            //a child view where text and button are
+            LinearLayout linearLayout = new LinearLayout(view.getContext());
+            linearLayout.setLayoutParams(layoutParams1);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams2.setMargins(20, 20, 20, 50);
+            TextView titre = new TextView(view.getContext());
+            titre.setLayoutParams(layoutParams2);
+            titre.setText(getResources().getString(R.string.connexionrequise));
+            linearLayout.addView(titre);
+
+            Button btn_connexion = new Button(view.getContext());
+            btn_connexion.setText(getResources().getString(R.string.connexion));
+            btn_connexion.setBackgroundResource(R.drawable.button_sumit);
+            btn_connexion.setPadding(20,20,20,20);
+            btn_connexion.setTextColor(getResources().getColor(R.color.white));
+            btn_connexion.setGravity(Gravity.CENTER);
+
+            btn_connexion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
+                }
+            });
+
+            linearLayout.addView(btn_connexion);
+
+            frameLayout.addView(linearLayout);
+            view = frameLayout;
+
+        }
+        else {
+            //user signed in : it shows how to add an advert
+
+            ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
+            AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+            autoCompleteTextView.setAdapter(arrayAdapter);
+
+            mapCreation();
+
+        }
 
         return view;
     }

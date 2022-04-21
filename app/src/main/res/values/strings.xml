@@ -70,4 +70,8 @@
     <string name="requisPseudo">Pseudo requis !</string>
     <string name="oui">Oui</string>
     <string name="non">Non</string>
+
+    <string name="remplirTousLesChamps">Veuillez remplir tous les champs svp</string>
+    <string name="incorrect">L\'adresse mail et/ou le mot de passe est incorrect</string>
+    <string name="connexionrequise">Il faut d\'abord se connecter (ou se créer un compte) :</string>
 </resources>

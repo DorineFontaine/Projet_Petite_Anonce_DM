@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -22,24 +24,23 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class InscriptionFragment extends Fragment {
 
-    //Recoit les informations sur le compte de l'utilisateur : Adresse Mail, Pseudo, etc ..
-    //Stocke l'information dans une BDD
+    //Create profil and store them in Firebase
 
-    EditText mail, mdp, pseudo;
+    EditText edittext_mail, edittext_psw, edittext_pseudo;
     Button submit;
-    String email, password, psd;
+    String mail, password, pseudo;
     FirebaseAuth mAuth;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_inscription, container, false);
 
-        mail = view.findViewById(R.id.editText2_mail);
-        pseudo = view.findViewById(R.id.editText_pseudo);
-        mdp = view.findViewById(R.id.editText2_mdp);
+        edittext_mail = view.findViewById(R.id.editText2_mail);
+        edittext_pseudo = view.findViewById(R.id.editText_pseudo);
+        edittext_psw = view.findViewById(R.id.editText2_mdp);
         submit = view.findViewById(R.id.btn_inscription);
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -49,63 +50,66 @@ public class InscriptionFragment extends Fragment {
 
 
                 /*************************************************ICI CHANGER LES SETERROR AVEC REQUISEMAIL,REQUISMDP etc ...***************/
-                email = mail.getText().toString();
-                password = mdp.getText().toString();
-                psd = pseudo.getText().toString();
+                mail = edittext_mail.getText().toString();
+                password = edittext_psw.getText().toString();
+                pseudo = edittext_pseudo.getText().toString();
 
-                if(email.isEmpty()){
-                    mail.setError("Email requis");
-                    mail.requestFocus();
+                if(mail.isEmpty()){
+                    edittext_mail.setError(getResources().getString(R.string.requisEmail));
+                    edittext_mail.requestFocus();
                     return;
                 }
 
 
                 if(password.isEmpty()){
-                    mdp.setError("Mot de passe  requis ");
-                    mdp.requestFocus();
+                    edittext_psw.setError(getResources().getString(R.string.requisMDP));
+                    edittext_psw.requestFocus();
                     return;
                 }
-                if(psd.isEmpty()){
-                    pseudo.setError("Pseudo requis  ");
-                    pseudo.requestFocus();
+                if(pseudo.isEmpty()){
+                    edittext_pseudo.setError(getResources().getString(R.string.requisPseudo));
+                    edittext_pseudo.requestFocus();
                     return;
                 }
                 if(password.length()< 6){
 
-                    mdp.setError("Entrez un passport qui contient au moins 6 lettre");
-                    mdp.requestFocus();
+                    edittext_psw.setError("Entrez un password qui contient au moins 6 lettre");
+                    edittext_psw.requestFocus();
                     return;
 
                 }
 
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    mail.setError("Vueillez rentrez un email valide ");
-                    mail.requestFocus();
+                if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()){
+                    edittext_mail.setError("Veuillez rentrez un email valide ");
+                    edittext_mail.requestFocus();
                     return;
 
                 }
 
                 mAuth = FirebaseAuth.getInstance();
-                mAuth.createUserWithEmailAndPassword(email, password)
+                mAuth.createUserWithEmailAndPassword(mail, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientParticulier clientParticulier = new ClientParticulier(psd,password,email);
+                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
 
                                     FirebaseDatabase.getInstance().getReference("ClientParticulier")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                             .setValue(clientParticulier).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                        public void onComplete(@NonNull Task<Void> task2) {
 
-                                            if(task.isSuccessful()){
+                                            if(task2.isSuccessful()){
 
-                                                Toast.makeText(getContext(), "Succées de l'enregistrement", Toast.LENGTH_LONG).show();
+                                                //transfered to profil account
+                                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
 
                                             }
                                             else{
-                                                Toast.makeText(getContext(), "Echec de l'enregistrement", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getContext(), "Echec de l'inscription", Toast.LENGTH_LONG).show();
                                             }
 
                                         }

@@ -19,18 +19,19 @@
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/imageProfil"
+                    android:id="@+id/imageProfilContainer"
                     android:layout_centerVertical="true"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     app:cardCornerRadius="90dp"
                     android:layout_margin="5dp">
                     <ImageView
+                        android:id="@+id/imageProfil"
                         android:src="@drawable/image_profil"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-
                         android:contentDescription="@string/imageProfil" />
 
 
@@ -42,7 +43,7 @@
                     android:layout_marginStart="20dp"
                     android:textSize="20sp"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/imageProfil"
+                    android:layout_toRightOf="@+id/imageProfilContainer"
                     android:text="La petite abeille"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
