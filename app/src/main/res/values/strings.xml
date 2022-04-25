@@ -68,6 +68,11 @@
     <string name="requisEmail">Email requis !</string>
     <string name="requisMDP">Mot de passe requis !</string>
     <string name="requisPseudo">Pseudo requis !</string>
+    <string name="requisTitle">Titre requis !</string>
+    <string name="requisLocalisation">Localisation requise !</string>
+    <string name="requisPrice"> Prix requis !</string>
+    <string name="requisDescription">Description requise !</string>
+
     <string name="oui">Oui</string>
     <string name="non">Non</string>
 

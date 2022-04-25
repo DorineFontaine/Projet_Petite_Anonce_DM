@@ -48,11 +48,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,38 +59,21 @@ public class AddFragment extends Fragment {
     private View view;
     private MapView map;
     private IMapController mapController;
-    FirebaseAuth mAuth;
 
-    public AddFragment() {
-        // Required empty public constructor
-    }
+    FirebaseAuth mAuth ;
+    Button btn_valider;
+    EditText editTextTitle, editTextLocalisation, editTextPrice, editTextDescription;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment AddFragment.
-     */
-    public static AddFragment newInstance(int param1) {
-        AddFragment fragment = new AddFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_PARAM1);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
+
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add, container, false);
 
@@ -149,18 +128,72 @@ public class AddFragment extends Fragment {
             frameLayout.addView(linearLayout);
             view = frameLayout;
 
-        }
-        else {
-            //user signed in : it shows how to add an advert
+        }else{
 
+            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Anonce");
             ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
             AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
             autoCompleteTextView.setAdapter(arrayAdapter);
 
             mapCreation();
 
-        }
+            btn_valider = view.findViewById(R.id.btn_valider);
+            editTextTitle = view.findViewById(R.id.editTextTitre);
+            editTextDescription = view.findViewById(R.id.editTextDescription);
+            editTextLocalisation = view.findViewById(R.id.editTextLocalisation);
+            editTextPrice = view.findViewById(R.id.editTextPrix);
 
+            //ADD
+
+            btn_valider.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String title, des, localisation,price;
+                    title = editTextTitle.getText().toString();
+                    des =  editTextDescription.getText().toString();
+                    localisation= editTextLocalisation.getText().toString();
+                    price = editTextPrice.getText().toString();
+
+                    if(title.isEmpty()){
+                        editTextTitle.setError(getResources().getString(R.string.requisTitle));
+                        editTextTitle.requestFocus();
+                        return;
+                    }
+
+
+                    if(des.isEmpty()){
+                        editTextDescription.setError(getResources().getString(R.string.requisDescription));
+                        editTextDescription.requestFocus();
+                        return;
+                    }
+                    if(localisation.isEmpty()){
+                        editTextLocalisation.setError(getResources().getString(R.string.requisLocalisation));
+                        editTextLocalisation.requestFocus();
+                        return;
+                    }
+                    if(price.isEmpty()){
+                        editTextLocalisation.setError(getResources().getString(R.string.requisPrice));
+                        editTextLocalisation.requestFocus();
+                        return;
+                    }
+
+
+                    Advert advert = new Advert(title,price,localisation,des);
+
+                    dao.add(advert).addOnSuccessListener(succ ->
+                    {
+                        Toast.makeText(getContext(), "Enregistrement rèussie", Toast.LENGTH_SHORT).show();
+                    }).addOnFailureListener(er->{
+                        Toast.makeText(getContext(), "Enregistrement echouer", Toast.LENGTH_SHORT).show();
+                    });
+
+
+
+                }
+            });
+
+
+        }
         return view;
     }
 
