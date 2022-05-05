@@ -19,5 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:elevation="2dp"
+        app:itemTextColor="@color/purple_500"
         app:menu="@menu/navigation" />
 </RelativeLayout>

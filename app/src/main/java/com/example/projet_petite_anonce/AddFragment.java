@@ -130,7 +130,7 @@ public class AddFragment extends Fragment {
 
         }else{
 
-            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Anonce");
+            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce");
             ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
             AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
             autoCompleteTextView.setAdapter(arrayAdapter);
@@ -182,9 +182,9 @@ public class AddFragment extends Fragment {
 
                     dao.add(advert).addOnSuccessListener(succ ->
                     {
-                        Toast.makeText(getContext(), "Enregistrement rèussie", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enregistrement réussi", Toast.LENGTH_SHORT).show();
                     }).addOnFailureListener(er->{
-                        Toast.makeText(getContext(), "Enregistrement echouer", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enregistrement échoué", Toast.LENGTH_SHORT).show();
                     });
 
 

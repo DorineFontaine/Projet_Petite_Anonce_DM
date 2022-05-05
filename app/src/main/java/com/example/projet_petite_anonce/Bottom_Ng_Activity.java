@@ -3,9 +3,15 @@ package com.example.projet_petite_anonce;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,28 +64,23 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
 
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-
-
                         break;
                     case R.id.nav_account:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AccountFragment()).commit();
                         break;
                     case R.id.nav_favorites:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoritesFragment()).commit();
-
                         break;
                     case R.id.nav_message:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessageFragment()).commit();
-
                         break;
                     case R.id.nav_add:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddFragment()).commit();
-
                         break;
 
                 }
