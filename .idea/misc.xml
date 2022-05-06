@@ -39,11 +39,14 @@
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/menu/navigation.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/drawable/bottomnavigation_view_colored.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/drawable/button_sumit.xml" value="0.1" />
+        <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/drawable/ic_baseline_create_24.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/drawable/icon_selector.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/activity_bottom_ng.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_account.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_favorites.xml" value="0.13125" />
+        <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_modif_profil.xml" value="0.6733870967741935" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_profil.xml" value="0.1" />
+        <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/grid_view_item.xml" value="0.22760416666666666" />
       </map>
     </option>
   </component>

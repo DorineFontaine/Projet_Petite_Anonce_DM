@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 public class InscriptionFragment extends Fragment {
@@ -93,9 +95,9 @@ public class InscriptionFragment extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
                                     ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
-
+                                    String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientParticulier")
-                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .child(user)
                                             .setValue(clientParticulier).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {

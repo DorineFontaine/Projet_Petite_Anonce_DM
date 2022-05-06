@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     //Page de chargement
     //Affiche la page principale aprés 4 secondes
 
-    private static int TIME_OUT = 4000;
+    private static int TIME_OUT = 2000;
     private Handler mHandler = new Handler();
 
     @SuppressLint("ResourceAsColor")
