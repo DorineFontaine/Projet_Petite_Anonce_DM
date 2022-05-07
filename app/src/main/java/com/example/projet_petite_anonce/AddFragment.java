@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -69,9 +70,6 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
 
 
         // Inflate the layout for this fragment
@@ -130,7 +128,7 @@ public class AddFragment extends Fragment {
 
         }else{
 
-            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce");
+            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce", user.getUid());
             ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
             AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
             autoCompleteTextView.setAdapter(arrayAdapter);
@@ -179,9 +177,10 @@ public class AddFragment extends Fragment {
 
 
                     Advert advert = new Advert(title,price,localisation,des);
-
                     dao.add(advert).addOnSuccessListener(succ ->
                     {
+                        //get advert created key
+
                         Toast.makeText(getContext(), "Enregistrement réussi", Toast.LENGTH_SHORT).show();
                     }).addOnFailureListener(er->{
                         Toast.makeText(getContext(), "Enregistrement échoué", Toast.LENGTH_SHORT).show();

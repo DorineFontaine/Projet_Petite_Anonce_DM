@@ -11,17 +11,22 @@ public class DAOPetiteAnnonce {
 
 
         private DatabaseReference myRef;
-
+        private DatabaseReference userRef;
         private DatabaseReference databaseReference;
-        public DAOPetiteAnnonce(String reference){
+
+        public DAOPetiteAnnonce(String reference, String userUID){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             myRef = database.getReference(reference);
-
+            userRef = database.getReference("ClientParticulier").child(userUID).child("MyAdvert");
 
         }
         public Task<Void> add(Object objet){
+            DatabaseReference keyRef = myRef.push();
+            String key = keyRef.getKey();
 
-            return myRef.push().setValue(objet);
+            //Add the advert in ClientParticulier user myadvert list
+            userRef.push().setValue(key);
+            return keyRef.setValue(objet);
 
         }
 
