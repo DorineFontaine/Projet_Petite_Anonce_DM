@@ -104,7 +104,7 @@ public class MessageFragment extends Fragment {
             //user signed in : it shows his conversations
 
             simpleList = (ListView) view.findViewById(R.id.listview_message);
-            CustomAdaptater customAdapter = new CustomAdaptater(getContext(),titre ,temps, prix, photo,nomAcheteur,  R.layout.list_view_item);
+            CustomAdaptater customAdapter = new CustomAdaptater(getContext(),titre ,temps, prix, null,nomAcheteur,null,  R.layout.list_view_item);
             simpleList.setAdapter(customAdapter);
 
             //On met un ecouteur sur chaque élément de la liste

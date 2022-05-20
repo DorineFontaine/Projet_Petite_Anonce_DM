@@ -1,7 +1,6 @@
 package com.example.projet_petite_anonce;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,6 +12,7 @@ public class DAOPetiteAnnonce {
         private DatabaseReference myRef;
         private DatabaseReference userRef;
         private DatabaseReference databaseReference;
+        private String key;
 
         public DAOPetiteAnnonce(String reference, String userUID){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -24,11 +24,15 @@ public class DAOPetiteAnnonce {
             DatabaseReference keyRef = myRef.push();
             String key = keyRef.getKey();
 
+            Advert advert = (Advert) objet;
+            advert.setKey(key);
+
             //Add the advert in ClientParticulier user myadvert list
             userRef.push().setValue(key);
             return keyRef.setValue(objet);
 
         }
+        public String getKey(){return key;}
 
         public Task<Void> update(String key, HashMap<String,Object> hashMap){
 

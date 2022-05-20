@@ -2,7 +2,6 @@ package com.example.projet_petite_anonce;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,10 +68,10 @@ public class ProfilFragment extends Fragment {
 
 
             //profil image
-            String imageString = user.getUid().toString();//get user id
+            String imageString = user.getUid();//get user id
 
             //each user have only one profil id, if there isn't a profil id we display buffer image
-            storageReference = FirebaseStorage.getInstance().getReference(imageString+"/profil/profil");///be carefull for the extension
+            storageReference = FirebaseStorage.getInstance().getReference(imageString+"/profil/profil");
 
             try {
                 File localeFile = File.createTempFile("tempfile", ".jpeg");
@@ -100,14 +98,19 @@ public class ProfilFragment extends Fragment {
             modifProfil.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ModifProfil()).commit();
                 }
             });
 
             //my advert
-
+            Button adverts_button = view.findViewById(R.id.btn_annonce);
+            adverts_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //transfered to list of his adverts
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AnnonceFragment()).commit();
+                }
+            });
 
 
             //sign out
@@ -116,8 +119,6 @@ public class ProfilFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     //transfered to profil account
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
                     mAuth.signOut();
                 }

@@ -3,6 +3,8 @@ package com.example.projet_petite_anonce;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,14 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 
 public class FavoritesFragment extends Fragment {
@@ -41,12 +52,13 @@ public class FavoritesFragment extends Fragment {
 
     FirebaseAuth mAuth ;
     ListView simpleList;
-
-    String ville[] = {"GARE SAINT ROCH ", " TOULOUSE ",  "ILE DE  FRANCE  ", "PARIS"};
-    String prix[] = {"15$ ", "5$", "90$", "20$"};
-    String temps[] = {"Aujourd'hui à 15h ", " 24/05/2022", "24/12/2022", "17/03/2022"};
-    String titre[] = {"Robe ", " BD", "Chaussure Nike", "Chaussure à talon"};
-    int photo[]={R.drawable.robe,R.drawable.bd,R.drawable.chaussure_nike,R.drawable.chaussure};
+    List<Advert> adverts;
+    View view;
+    String[] ville;
+    String[] prix ;
+    String[] temps ;
+    String[] titre;
+    Bitmap[] photo;
 
 
 
@@ -55,7 +67,7 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         //check if user signed in
         mAuth = FirebaseAuth.getInstance();
@@ -112,88 +124,192 @@ public class FavoritesFragment extends Fragment {
         else{
             //user signed in : it shows his favourites adverts
 
-            Dialog dialog = new Dialog(getContext());
 
-            // Implementation de la liste de favoris
-            simpleList = (ListView) view.findViewById(R.id.listview);
-            CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre,  R.layout.list_view_item);
-            simpleList.setAdapter(customAdapter);
-            //On met un ecouteur sur chaque élément de la liste
-            simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    LinearLayout affiche = view.findViewById(R.id.linearLayout2);
-                    LinearLayout supprime = view.findViewById(R.id.supprimer);
-                    ImageView imageView = view.findViewById(R.id.icon);
-
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(photo[i],prix[i],titre[i],temps[i])).commit();
+            //if he already has favourite adverts
 
 
-                        }
-                    });
+            DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert");
 
-                    affiche.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+            advertDirectory.orderByValue().addValueEventListener(new ValueEventListener() {
 
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(photo[i],prix[i],titre[i],temps[i])).commit();
+               @Override
+               public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        }
-                    });
+                   //Get favourites keys adverts
+                   List<String> keyAdverts = new ArrayList<>();
 
-                    supprime.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                            alertDialogBuilder.setMessage(R.string.suppression);
-                            alertDialogBuilder.setPositiveButton(R.string.oui,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                   //Get all his adverts key  in Firebase
+                   Consumer getAdvertKey = new Consumer<DataSnapshot>(){
+                       public void accept(DataSnapshot snapshot2){
 
-                                            // la tache à executer une fois le bouton Oui est appuyé
-                                        }
-                                    });
+                           String aBuffer = snapshot2.getValue().toString();
+                           keyAdverts.add(aBuffer);
+                       };
+                   };
 
-                            alertDialogBuilder.setNegativeButton(R.string.non
-                                    ,new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface arg0, int arg1) {
-                                            // la tache à exécuter une fois le bouton est Non appuyé
+                   snapshot.getChildren().forEach(getAdvertKey);
 
-                                        }
-                                    });
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-                            alertDialog.show();
+                   //get advert from Firebase in Annonce with keyAdverts
+                   DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("Annonce");
+
+                   //Get the advert in Firebase
+                   Consumer getAdvertData = new Consumer<DataSnapshot>(){
+                       public void accept(DataSnapshot snapshot2){
+
+                           if( keyIsIn(snapshot2.getKey() , keyAdverts)) {
+                               Iterable<DataSnapshot> advertsBuffer = snapshot2.getChildren();
+
+                               List<String> advertChildren = new ArrayList<>();
+                               for (DataSnapshot postSnapshot: advertsBuffer) {
+                                   advertChildren.add( postSnapshot.getValue().toString());
+                               }
+                               Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(1), advertChildren.get(0), advertChildren.get(6));
+                               advert.setKey(snapshot.getKey());
+
+                               //get bitmap from Storage Firebase
+                               StorageReference storageReferenceImage = FirebaseStorage.getInstance().getReference("annonce/"+advert.getKey());
+
+                               try {
+                                   File localeFile = File.createTempFile("tempfile", ".jpeg");
+                                   storageReferenceImage.getFile(localeFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+
+                                       @Override
+                                       public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                           Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
+                                           advert.setImage(bitmap);
+                                       }
+
+                                   }).addOnFailureListener(new OnFailureListener() {
+                                       @Override
+                                       public void onFailure(@NonNull Exception e) {
+                                       }
+                                   });
+                               } catch (IOException e) {
+                                   e.printStackTrace();
+                               }
+
+                               adverts.add(advert);
+                           }
+
+                       };
+                   };
+
+                   adverts = new ArrayList<>();
+                   snapshot.getChildren().forEach(getAdvertData);
+
+                   ville = new String[adverts.size()];
+                   prix = new String[adverts.size()];
+                   temps= new String[adverts.size()];
+                   titre= new String[adverts.size()];
+                   photo= new Bitmap[adverts.size()];
+
+                   //Créer la liste des éléments d'advert
+                   for(int i = 0; i < adverts.size(); i++){
+                       Advert a = adverts.get(i);
+                       ville[i] = a.getLocation();
+                       prix[i] = a.getPrice();
+                       temps[i] = "pas encore dans la bdd";
+                       titre[i] = a.getTitle();
+                       photo[i] = a.getImage(); //R.drawable pas encore dans bdd
+                   }
 
 
 
+                   Dialog dialog = new Dialog(getContext());
+
+                   // Implementation de la liste de favoris
+                   simpleList = (ListView) view.findViewById(R.id.listview);
+                   CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre, null,  R.layout.list_view_item);
+                   simpleList.setAdapter(customAdapter);
+                   //On met un ecouteur sur chaque élément de la liste
+                   simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                       @Override
+                       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                           LinearLayout affiche = view.findViewById(R.id.linearLayout2);
+                           LinearLayout delete = view.findViewById(R.id.supprimer);
+                           ImageView imageView = view.findViewById(R.id.icon);
+
+                           imageView.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View view) {
+
+                                   FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                   FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                   //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
+                                   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
+
+
+                               }
+                           });
+
+                           affiche.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View view) {
+
+                                   FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                   FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                   //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
+                                   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
+
+                               }
+                           });
+
+                           delete.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View view) {
+                                   AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                                   alertDialogBuilder.setMessage(R.string.suppression);
+                                   alertDialogBuilder.setPositiveButton(R.string.oui,
+                                           new DialogInterface.OnClickListener() {
+                                               @Override
+                                               public void onClick(DialogInterface dialog, int which) {
+
+                                                   // delete advert from myFavAdvert in Firebase
+                                                   DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert");
+                                                   advertDirectory.child(adverts.get(i).getKey()).removeValue();
+
+                                               }
+                                           });
+
+                                   alertDialogBuilder.setNegativeButton(R.string.non
+                                           ,new DialogInterface.OnClickListener() {
+                                               @Override
+                                               public void onClick(DialogInterface arg0, int arg1) {
+
+                                                   //doing nothing
+
+                                               }
+                                           });
+                                   AlertDialog alertDialog = alertDialogBuilder.create();
+                                   alertDialog.show();
 
 
 
+                                   /*******************************************************************************/
+                               }
+                           });
 
-                            /*******************************************************************************/
-                        }
-                    });
+                       }/****/
+                   });
+               }
 
-                }/****/
+               @Override
+               public void onCancelled(@NonNull DatabaseError error) {
+
+               }
             });
         }
 
-
-
-
-
        return view;
+    }
+
+    public Boolean keyIsIn(String key , List<String> keyList){
+        for (String keyBuffer : keyList) {
+            if(key.equals(keyBuffer)){
+
+                return true;
+            }
+        }
+        return false;
     }
 }

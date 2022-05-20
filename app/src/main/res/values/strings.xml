@@ -27,6 +27,7 @@
     <string name="descriptionEnonce">Description du bien :</string>
     <string name="titre">Titre</string>
     <string name="categorie">Choisir la catégorie</string>
+    <string name="categorieTitre">Catégorie</string>
     <string name="descriptionExemple">Une belle description avec 500 caractères maximum :)</string>
     <string name="prixEnonce">Renseignez le prix du bien :</string>
     <string name="prix">Prix en €</string>
@@ -36,6 +37,7 @@
     <string name="contacter">Contacter</string>
     <string name="details">Détails</string>
     <string name="etat">Etat</string>
+    <string name="supp">Supprimer mon compte</string>
     <string name="partager">Partager</string>
     <string name="signaler">Signaler</string>
     <string name="favories">Favories</string>
@@ -53,7 +55,7 @@
     <string name="localiser">Localiser l\'annonce</string>
     <string name="sup">Supprimez !</string>
     <string name="bienvenu">Bienvenue</string>
-        <string name="annonce">Annonces</string>
+    <string name="annonce">Annonces</string>
     <string name="avis">Avis</string>
     <string name="modif">Modifier mon profil</string>
     <string name="mesannonces">Mes annonces</string>
@@ -66,6 +68,7 @@
     <string name="suppression">Etes vous sûre de vouloir supprimer cette articles de votre liste? </string>
     <string name="suppressionMessage">Etes vous sûre de vouloir supprimer cette conversation? </string>
     <string name="requisEmail">Email requis !</string>
+    <string name="requisType">Type requis !</string>
     <string name="requisMDP">Mot de passe requis !</string>
     <string name="requisPseudo">Pseudo requis !</string>
     <string name="requisTitle">Titre requis !</string>

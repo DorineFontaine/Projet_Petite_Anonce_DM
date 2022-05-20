@@ -1,6 +1,5 @@
 package com.example.projet_petite_anonce;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,6 @@ public class AccountFragment extends Fragment {
     TextView inscription, psw_forgotten;
     EditText editText_mail, editText_psw;
     String mail, psw;
-    Intent page_inscription;
     FirebaseAuth mAuth;
 
     @Override
@@ -47,8 +45,6 @@ public class AccountFragment extends Fragment {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if(user != null){
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
 
         }
@@ -77,8 +73,6 @@ public class AccountFragment extends Fragment {
             inscription.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionFragment()).commit();
 
                 }
@@ -103,8 +97,6 @@ public class AccountFragment extends Fragment {
                                 if(task.isSuccessful()){
 
                                     //transfered to profil account
-                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
 
                                 }
@@ -118,7 +110,10 @@ public class AccountFragment extends Fragment {
                     }
                     else{
                         //fields arent supposed to be empty
-                        Toast.makeText(getContext(), R.string.remplirTousLesChamps, Toast.LENGTH_LONG).show();
+                        if(mail.isEmpty())
+                            editText_mail.setError(getResources().getString(R.string.requisEmail));
+                        if(psw.isEmpty())
+                            editText_psw.setError(getResources().getString(R.string.requisMDP));
                     }
 
                 }

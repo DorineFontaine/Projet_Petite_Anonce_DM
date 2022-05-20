@@ -1,8 +1,16 @@
 package com.example.projet_petite_anonce;
 
-public class Advert {
-    String key,image, title,ownername,price,location,date,category,description,contact;
+import android.graphics.Bitmap;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Advert {
+    String key, title,ownername,price,location,date,category,description,contact, state;
+    Bitmap image;
+    /*
+    Image is a bitmap
+     */
 
  /*   public Advert(String image ,String title, String ownername,String price,String location,String date, String category,String description,String contact){
         this.image = image;
@@ -16,25 +24,29 @@ public class Advert {
         this.contact = contact;
     }*/
 
-    public Advert(String title,String price,String location,String description){
+    public Advert(String title,String price,String location,String description, String category, String state){
 
         this.title = title;
-
+        this.state = state;
+        this.category = category;
         this.price = price;
         this.location = location;
-
         this.description = description;
 
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MMM/yyyy");
+        this.date = dateFormat.format(currentDate);
     }
 
     public String getKey(){return key;}
+
     public void setKey(String key){this.key = key;}
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -84,6 +96,14 @@ public class Advert {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getDescription() {
