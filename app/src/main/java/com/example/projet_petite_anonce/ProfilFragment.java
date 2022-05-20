@@ -1,8 +1,5 @@
 package com.example.projet_petite_anonce;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,16 +7,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,18 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class ProfilFragment extends Fragment {
     Button modifProfil;
     FirebaseAuth mAuth;
-    StorageReference storageReference;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,57 +39,55 @@ public class ProfilFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ModifProfil()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ModifProfil()).commit();
             }
         });
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
         if(user != null){
-
+//************************************************************Probleme****************************************************************************
             //get and display client information
+
             DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid());
             DatabaseReference pseudo = userInformation.child("pseudo");
 
-            pseudo.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    TextView pseudo_textView = view.findViewById(R.id.pseudoProfil);
-                    Object pseudoTest = snapshot.getValue();
-                    if( pseudoTest != null)
-                        pseudo_textView.setText((String)pseudoTest);
-                }
+            DatabaseReference userInformation2 = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(user.getUid());
+            DatabaseReference societe = userInformation.child("nom_societe");
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });
+           /* if (pseudo != null){
 
-
-            //profil image
-            String imageString = user.getUid().toString();//get user id
-
-            //each user have only one profil id, if there isn't a profil id we display buffer image
-            storageReference = FirebaseStorage.getInstance().getReference(imageString+"/profil/profil");///be carefull for the extension
-
-            try {
-                File localeFile = File.createTempFile("tempfile", ".jpeg");
-                storageReference.getFile(localeFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-
+                Log.d("PSEUDO","JE SUIS NON NUL ");
+                pseudo.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
-                        ImageView imageView = view.findViewById(R.id.imageProfil);
-                        imageView.setImageBitmap(bitmap);
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        TextView pseudo_textView = view.findViewById(R.id.pseudoProfil);
+                        if( snapshot.getValue().toString()!= null)
+                            pseudo_textView.setText(snapshot.getValue().toString());
                     }
 
-                }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            }else {
+                Log.d("PSEUDO","JE SUIS  NUL ");
+                if(societe != null){
+                    Log.d("SOCIETE","JE SUIS NON NUL ");
+                    societe.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            TextView pseudo_textView = view.findViewById(R.id.pseudoProfil);
+                            if( snapshot.getValue().toString() != null)
+                                pseudo_textView.setText(snapshot.getValue().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
+                }
+           // }
+    */
 
 
 

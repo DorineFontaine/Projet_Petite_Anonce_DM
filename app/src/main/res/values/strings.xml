@@ -53,7 +53,7 @@
     <string name="localiser">Localiser l\'annonce</string>
     <string name="sup">Supprimez !</string>
     <string name="bienvenu">Bienvenue</string>
-        <string name="annonce">Annonces</string>
+    <string name="annonce">Annonces</string>
     <string name="avis">Avis</string>
     <string name="modif">Modifier mon profil</string>
     <string name="mesannonces">Mes annonces</string>
@@ -63,9 +63,14 @@
     <string name="imageProfil">Image du profil</string>
     <string name="revert">Revenir en arrière</string>
     <string name="particulier">Particulier</string>
+    <string name="professionel">Professionel</string>
+    <string name="nom_société">Nom de la société</string>
+    <string name="siret">Numéro de SIRET</string>
     <string name="suppression">Etes vous sûre de vouloir supprimer cette articles de votre liste? </string>
     <string name="suppressionMessage">Etes vous sûre de vouloir supprimer cette conversation? </string>
     <string name="requisEmail">Email requis !</string>
+    <string name="requisSociete">Nom de société requis !</string>
+    <string name="requisSiret">NUméro de siret requis !</string>
     <string name="requisMDP">Mot de passe requis !</string>
     <string name="requisPseudo">Pseudo requis !</string>
     <string name="requisTitle">Titre requis !</string>

@@ -138,18 +138,21 @@
 
             <Button
                 android:id="@+id/btn_annonce"
-                android:drawableLeft="@drawable/ic_baseline_article_24"
-                android:drawableTint="@color/noirTransparent"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_below="@+id/viewDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/viewDivider"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                android:shadowColor="@color/white"
-                android:textColor="@color/grey"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/white"
-                android:text="@string/mesannonces" />
+                android:drawableLeft="@drawable/ic_baseline_article_24"
+                android:drawableTint="@color/noirTransparent"
+                android:shadowColor="@color/white"
+                android:text="@string/mesannonces"
+                android:textColor="@color/grey" />
 
             <View
                 android:id="@+id/viewDivider2"

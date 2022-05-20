@@ -22,7 +22,7 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editText_pseudo"
+        android:id="@+id/editText_SIRET"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -31,13 +31,13 @@
         android:drawablePadding="4dp"
         android:elevation="6dp"
         android:ems="10"
-        android:hint="@string/pseudo"
+        android:hint="@string/siret"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:padding="8dp" />
 
     <EditText
-        android:id="@+id/editText2_mail"
+        android:id="@+id/editText_mail"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -52,7 +52,7 @@
         android:padding="8dp" />
 
     <EditText
-        android:id="@+id/editText2_mdp"
+        android:id="@+id/editText_mdp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -67,8 +67,24 @@
         android:padding="8dp"
         android:password="true" />
 
+    <EditText
+        android:id="@+id/editText_nom_de_societe"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="125dp"
+        android:background="@drawable/edittext"
+        android:drawablePadding="4dp"
+        android:elevation="6dp"
+        android:ems="10"
+        android:hint="@string/nom_société"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:password="false" />
+
     <Button
-        android:id="@+id/btn_inscription"
+        android:id="@+id/btn2_inscription"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -78,11 +94,13 @@
         app:cornerRadius="50dp" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/switch2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="470dp"
-        android:minHeight="48dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="200dp"
+        android:checked="true"
         android:text="@string/professionel" />
+
 
 </FrameLayout>

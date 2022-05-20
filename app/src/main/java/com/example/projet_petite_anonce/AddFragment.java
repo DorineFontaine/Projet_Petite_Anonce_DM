@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,8 @@ public class AddFragment extends Fragment {
     FirebaseAuth mAuth ;
     Button btn_valider;
     EditText editTextTitle, editTextLocalisation, editTextPrice, editTextDescription;
-
+    RadioButton bon, satif, neuf,tbon;
+    String etat;
 
 
     @Override
@@ -137,11 +139,16 @@ public class AddFragment extends Fragment {
 
             mapCreation();
 
+            //INITIALISATION
             btn_valider = view.findViewById(R.id.btn_valider);
             editTextTitle = view.findViewById(R.id.editTextTitre);
             editTextDescription = view.findViewById(R.id.editTextDescription);
             editTextLocalisation = view.findViewById(R.id.editTextLocalisation);
             editTextPrice = view.findViewById(R.id.editTextPrix);
+            bon = view.findViewById(R.id.bon);
+            satif= view.findViewById(R.id.satis);
+            neuf = view.findViewById(R.id.neuf);
+            tbon = view.findViewById(R.id.tresbon);
 
             //ADD
 
@@ -177,14 +184,28 @@ public class AddFragment extends Fragment {
                         return;
                     }
 
+                    if(bon.isChecked()){
+                        etat = "Bon état";
+                    }
+                    if(tbon.isChecked()){
+                        etat = "Trés bon état";
+                    }
+                    if(satif.isChecked()){
+                        etat = "Satisfaisant";
+                    }
+                    if(neuf.isChecked()){
+                        etat = "Neuf";
+                    }
 
-                    Advert advert = new Advert(title,price,localisation,des);
+
+
+                    Advert advert = new Advert(title,price,localisation,des,etat);
 
                     dao.add(advert).addOnSuccessListener(succ ->
                     {
-                        Toast.makeText(getContext(), "Enregistrement réussi", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enregistrement rèussie", Toast.LENGTH_SHORT).show();
                     }).addOnFailureListener(er->{
-                        Toast.makeText(getContext(), "Enregistrement échoué", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enregistrement echouer", Toast.LENGTH_SHORT).show();
                     });
 
 

@@ -1,6 +1,5 @@
 package com.example.projet_petite_anonce;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,57 +19,46 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 
-public class InscriptionFragment extends Fragment {
+public class InscriptionProffessionelFragment extends Fragment {
 
-    //Create profil and store them in Firebase
-
-    EditText edittext_mail, edittext_psw, edittext_pseudo;
+    EditText edittext_mail, edittext_psw, edittext_siret, edittext_nom_societe;
     Button submit;
-    String mail, password, pseudo;
+    String mail, password, nom_societe,siret;
     FirebaseAuth mAuth;
-    Switch mySwitch;
-
-
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_inscription, container, false);
+        View view = inflater.inflate(R.layout.fragment_inscription_proffessionel, container, false);
+        edittext_mail = view.findViewById(R.id.editText_mail);
+        edittext_psw = view.findViewById(R.id.editText_mdp);
+        edittext_nom_societe = view.findViewById(R.id.editText_nom_de_societe);
+        edittext_siret = view.findViewById(R.id.editText_SIRET);
+        submit = view.findViewById(R.id.btn2_inscription);
 
-        edittext_mail = view.findViewById(R.id.editText2_mail);
-        edittext_pseudo = view.findViewById(R.id.editText_pseudo);
-        edittext_psw = view.findViewById(R.id.editText2_mdp);
-        submit = view.findViewById(R.id.btn_inscription);
-        mySwitch = view.findViewById(R.id.switch1);
-
-
-
-
+        Switch mySwitch = view.findViewById(R.id.switch2);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(mySwitch.isChecked()){
+                if(!mySwitch.isChecked()){
 
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionProffessionelFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InscriptionFragment()).commit();
 
 
 
                 }
             }
         });
-
-
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +69,8 @@ public class InscriptionFragment extends Fragment {
                 /*************************************************ICI CHANGER LES SETERROR AVEC REQUISEMAIL,REQUISMDP etc ...***************/
                 mail = edittext_mail.getText().toString();
                 password = edittext_psw.getText().toString();
-                pseudo = edittext_pseudo.getText().toString();
+                nom_societe = edittext_nom_societe.getText().toString();
+                siret = edittext_siret.getText().toString();
 
                 if(mail.isEmpty()){
                     edittext_mail.setError(getResources().getString(R.string.requisEmail));
@@ -89,15 +78,20 @@ public class InscriptionFragment extends Fragment {
                     return;
                 }
 
+                if(siret.isEmpty()){
+                    edittext_siret.setError(getResources().getString(R.string.requisSiret));
+                    edittext_siret.requestFocus();
+                    return;
+                }
 
                 if(password.isEmpty()){
                     edittext_psw.setError(getResources().getString(R.string.requisMDP));
                     edittext_psw.requestFocus();
                     return;
                 }
-                if(pseudo.isEmpty()){
-                    edittext_pseudo.setError(getResources().getString(R.string.requisPseudo));
-                    edittext_pseudo.requestFocus();
+                if(nom_societe.isEmpty()){
+                    edittext_nom_societe.setError(getResources().getString(R.string.requisSociete));
+                    edittext_nom_societe.requestFocus();
                     return;
                 }
                 if(password.length()< 6){
@@ -121,11 +115,11 @@ public class InscriptionFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
+                                    ClientProfessionel clientProfessionel = new ClientProfessionel(nom_societe,siret,password,mail);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    FirebaseDatabase.getInstance().getReference("ClientParticulier")
+                                    FirebaseDatabase.getInstance().getReference("ClientProfessionnel")
                                             .child(user)
-                                            .setValue(clientParticulier).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            .setValue(clientProfessionel).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
 
@@ -134,7 +128,7 @@ public class InscriptionFragment extends Fragment {
                                                 //transfered to profil account
                                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilFragment()).commit();
 
                                             }
                                             else{
@@ -153,6 +147,7 @@ public class InscriptionFragment extends Fragment {
 
             }
         });
+
 
 
 
