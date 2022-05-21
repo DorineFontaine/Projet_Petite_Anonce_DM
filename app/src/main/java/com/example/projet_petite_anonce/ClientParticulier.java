@@ -11,7 +11,7 @@ public class ClientParticulier {
     private String picture;
     private String client;
 
-    public ClientParticulier(String name, String password, String mail, String client){
+    public ClientParticulier(String name, String password, String mail){
         this.pseudo = name;
         this.password = password;
         this.mail = mail;

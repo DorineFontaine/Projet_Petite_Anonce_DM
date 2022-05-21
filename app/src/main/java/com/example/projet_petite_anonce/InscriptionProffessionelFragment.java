@@ -132,7 +132,7 @@ public class InscriptionProffessionelFragment extends Fragment {
                                                 //transfered to profil account
                                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilFragment()).commit();
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilProfessionelFragment()).commit();
 
                                             }
                                             else{

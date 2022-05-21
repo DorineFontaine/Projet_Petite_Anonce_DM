@@ -51,9 +51,9 @@ public class ProfilFragment extends Fragment {
         if(user != null){
 
             //get and display client information
-            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference().child(user.getUid());
+            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid());
             DatabaseReference pseudo = userInformation.child("pseudo");
-            DatabaseReference client = userInformation.child("client");
+
 
             pseudo.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -71,23 +71,7 @@ public class ProfilFragment extends Fragment {
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
 
-            client.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String clientTest = (String) snapshot.getValue();
-                    if(clientTest != null) {
-                        if (clientTest.equals("1")) {
-                            inflater.inflate(R.layout.fragment_profil_professionnel, container, false);
 
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
 
 
             //profil image
@@ -117,6 +101,7 @@ public class ProfilFragment extends Fragment {
             }
 
             //update profil
+
         //    modifProfil = view.findViewById(R.id.btn_modif);
             modifProfil.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -53,7 +53,7 @@
     <string name="localiser">Localiser l\'annonce</string>
     <string name="sup">Supprimez !</string>
     <string name="bienvenu">Bienvenue</string>
-        <string name="annonce">Annonces</string>
+    <string name="annonce">Annonces</string>
     <string name="avis">Avis</string>
     <string name="modif">Modifier mon profil</string>
     <string name="mesannonces">Mes annonces</string>
@@ -81,7 +81,6 @@
     <string name="requisSiret">SIRET requis!</string>
     <string name="requisSociete">Nom de société requis !</string>
     <string name="statistique">Statistique</string>
-
 
 
     <string name="oui">Oui</string>

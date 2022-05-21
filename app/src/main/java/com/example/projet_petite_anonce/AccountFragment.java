@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class AccountFragment extends Fragment {
@@ -45,7 +51,31 @@ public class AccountFragment extends Fragment {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if(user != null){
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
+           DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(user.getUid());
+            DatabaseReference client = userInformation.child("client");
+
+            client.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String clientb = (String)snapshot.getValue();
+                    if (clientb != null){
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilProfessionelFragment()).commit();
+
+                    }else{
+
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
 
         }
         else{
@@ -97,7 +127,37 @@ public class AccountFragment extends Fragment {
                                 if(task.isSuccessful()){
 
                                     //transfered to profil account
-                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
+
+                                    mAuth = FirebaseAuth.getInstance();
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                    DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(user.getUid());
+                                    DatabaseReference client = userInformation.child("client");
+
+                                    client.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String clientb = (String)snapshot.getValue();
+                                            if (clientb != null){
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilProfessionelFragment()).commit();
+
+                                            }else{
+
+                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ProfilFragment()).commit();
+
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+
+
+
 
                                 }
                                 else{

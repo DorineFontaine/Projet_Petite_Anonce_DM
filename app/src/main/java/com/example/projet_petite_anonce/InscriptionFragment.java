@@ -115,7 +115,7 @@ public class InscriptionFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail,client);
+                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientParticulier")
                                             .child(user)
