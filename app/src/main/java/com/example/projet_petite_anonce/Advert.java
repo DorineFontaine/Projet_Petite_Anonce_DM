@@ -1,7 +1,7 @@
 package com.example.projet_petite_anonce;
 
 public class Advert {
-    String image, title,ownername,price,location,date,category,description,contact;
+    String key,image, title,ownername,price,location,date,category,description,contact;
 
 
  /*   public Advert(String image ,String title, String ownername,String price,String location,String date, String category,String description,String contact){
@@ -26,6 +26,9 @@ public class Advert {
         this.description = description;
 
     }
+
+    public String getKey(){return key;}
+    public void setKey(String key){this.key = key;}
 
     public String getImage() {
         return image;

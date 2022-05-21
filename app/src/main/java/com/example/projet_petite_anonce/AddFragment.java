@@ -27,13 +27,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -64,16 +64,12 @@ public class AddFragment extends Fragment {
     FirebaseAuth mAuth ;
     Button btn_valider;
     EditText editTextTitle, editTextLocalisation, editTextPrice, editTextDescription;
-    RadioButton bon, satif, neuf,tbon;
-    String etat;
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
 
 
         // Inflate the layout for this fragment
@@ -132,23 +128,18 @@ public class AddFragment extends Fragment {
 
         }else{
 
-            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce");
+            DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce", user.getUid());
             ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
             AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
             autoCompleteTextView.setAdapter(arrayAdapter);
 
             mapCreation();
 
-            //INITIALISATION
             btn_valider = view.findViewById(R.id.btn_valider);
             editTextTitle = view.findViewById(R.id.editTextTitre);
             editTextDescription = view.findViewById(R.id.editTextDescription);
             editTextLocalisation = view.findViewById(R.id.editTextLocalisation);
             editTextPrice = view.findViewById(R.id.editTextPrix);
-            bon = view.findViewById(R.id.bon);
-            satif= view.findViewById(R.id.satis);
-            neuf = view.findViewById(R.id.neuf);
-            tbon = view.findViewById(R.id.tresbon);
 
             //ADD
 
@@ -184,28 +175,15 @@ public class AddFragment extends Fragment {
                         return;
                     }
 
-                    if(bon.isChecked()){
-                        etat = "Bon état";
-                    }
-                    if(tbon.isChecked()){
-                        etat = "Trés bon état";
-                    }
-                    if(satif.isChecked()){
-                        etat = "Satisfaisant";
-                    }
-                    if(neuf.isChecked()){
-                        etat = "Neuf";
-                    }
 
-
-
-                    Advert advert = new Advert(title,price,localisation,des,etat);
-
+                    Advert advert = new Advert(title,price,localisation,des);
                     dao.add(advert).addOnSuccessListener(succ ->
                     {
-                        Toast.makeText(getContext(), "Enregistrement rèussie", Toast.LENGTH_SHORT).show();
+                        //get advert created key
+
+                        Toast.makeText(getContext(), "Enregistrement réussi", Toast.LENGTH_SHORT).show();
                     }).addOnFailureListener(er->{
-                        Toast.makeText(getContext(), "Enregistrement echouer", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enregistrement échoué", Toast.LENGTH_SHORT).show();
                     });
 
 

@@ -61,6 +61,7 @@ public class ModifProfil extends Fragment {
     Uri imageUri;
     FirebaseUser user;
     String pswOld;
+    String userUID;
 
 
     public ModifProfil() {
@@ -290,6 +291,36 @@ public class ModifProfil extends Fragment {
                 //image
                 if(bitmap.getValue() != null)
                     saveBitmapFirebase(view);
+            }
+        });
+
+        Button supp = view.findViewById(R.id.btn_supp);
+        userUID = user.getUid();
+
+        supp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        //delete ClientParticulier
+                        DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(userUID);
+                        userInformation.removeValue();
+
+                        userInformation = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(userUID);
+                        userInformation.removeValue();
+
+                        //il faut supprimer ses annonces (dans annonce et image annonce)
+                        //il faut supprimer ses annonces des listes MyFavAdvert des autres utilisateurs
+                        /********************************************************************************************/
+
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
+                    }
+                });
+
+
+
             }
         });
 

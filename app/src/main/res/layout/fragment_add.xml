@@ -39,9 +39,19 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="20dp"
                 >
+
+                <ImageButton
+                    android:id="@+id/imageAnnonce"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_baseline_add_circle_24"
+                    android:contentDescription="Photo du bien de l annonce" />
+
                 <TextView
                     android:id="@+id/titreEnonce"
                     android:textStyle="bold"
+                    android:layout_below="@+id/imageAnnonce"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"

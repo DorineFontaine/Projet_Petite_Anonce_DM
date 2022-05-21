@@ -131,8 +131,19 @@
                     android:autofillHints="" />
 
                 <Button
-                    android:id="@+id/btn_change"
+                    android:id="@+id/btn_supp"
                     android:layout_below="@id/editTextNum"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:backgroundTint="@color/greyTransparent"
+                    android:text="@string/supp"
+                    app:cornerRadius="50dp" />
+
+                <Button
+                    android:id="@+id/btn_change"
+                    android:layout_below="@id/btn_supp"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
