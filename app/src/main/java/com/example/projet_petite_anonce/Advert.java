@@ -1,29 +1,29 @@
 package com.example.projet_petite_anonce;
 
 public class Advert {
-    String image, title,ownerid,price,location,date,category,description,contact, state;
+    String image, title,ownername,price,location,date,category,description,contact;
 
 
  /*   public Advert(String image ,String title, String ownername,String price,String location,String date, String category,String description,String contact){
         this.image = image;
-
+        this.title = title;
+        this.ownername = ownername;
+        this.price = price;
+        this.location = location;
         this.date = date;
         this.category = category;
         this.description = description;
         this.contact = contact;
     }*/
 
-    public Advert(String title, String price, String location, String description, String category){
+    public Advert(String title,String price,String location,String description){
 
         this.title = title;
 
         this.price = price;
         this.location = location;
-        this.ownerid = ownerid;
-        this.description = description;
-        this.category = category;
-        this.state = state;
 
+        this.description = description;
 
     }
 
@@ -44,11 +44,11 @@ public class Advert {
     }
 
     public String getOwnername() {
-        return ownerid;
+        return ownername;
     }
 
     public void setOwnername(String ownername) {
-        this.ownerid = ownername;
+        this.ownername = ownername;
     }
 
     public String getPrice() {
