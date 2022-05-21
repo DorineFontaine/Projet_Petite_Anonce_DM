@@ -29,7 +29,11 @@ public class InscriptionProffessionelFragment extends Fragment {
 
     EditText edittext_mail, edittext_psw, edittext_siret, edittext_nom_societe;
     Button submit;
-    String mail, password, nom_societe,siret;
+    String mail;
+    String password;
+    String nom_societe;
+    String siret;
+    String client;
     FirebaseAuth mAuth;
 
 
@@ -43,7 +47,7 @@ public class InscriptionProffessionelFragment extends Fragment {
         edittext_nom_societe = view.findViewById(R.id.editText_nom_de_societe);
         edittext_siret = view.findViewById(R.id.editText_SIRET);
         submit = view.findViewById(R.id.btn2_inscription);
-
+        client = "1";
         Switch mySwitch = view.findViewById(R.id.switch2);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -115,7 +119,7 @@ public class InscriptionProffessionelFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientProfessionel clientProfessionel = new ClientProfessionel(nom_societe,siret,password,mail);
+                                    ClientProfessionel clientProfessionel = new ClientProfessionel(nom_societe,siret,mail,password,client);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientProfessionnel")
                                             .child(user)

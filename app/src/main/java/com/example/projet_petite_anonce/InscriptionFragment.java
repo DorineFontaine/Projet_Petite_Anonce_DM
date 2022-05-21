@@ -1,6 +1,5 @@
 package com.example.projet_petite_anonce;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,27 +32,24 @@ public class InscriptionFragment extends Fragment {
 
     EditText edittext_mail, edittext_psw, edittext_pseudo;
     Button submit;
-    String mail, password, pseudo;
+    String mail, password, pseudo,client;
     FirebaseAuth mAuth;
     Switch mySwitch;
-
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_inscription, container, false);
+        View view = inflater.inflate(R.layout.fragment_inscription, container, false);
 
         edittext_mail = view.findViewById(R.id.editText2_mail);
         edittext_pseudo = view.findViewById(R.id.editText_pseudo);
         edittext_psw = view.findViewById(R.id.editText2_mdp);
         submit = view.findViewById(R.id.btn_inscription);
         mySwitch = view.findViewById(R.id.switch1);
-
-
-
+        client = "0";
+        // Création d'un compte professionnel
 
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -69,8 +65,6 @@ public class InscriptionFragment extends Fragment {
                 }
             }
         });
-
-
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +115,7 @@ public class InscriptionFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
+                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail,client);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientParticulier")
                                             .child(user)

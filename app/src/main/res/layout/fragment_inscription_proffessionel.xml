@@ -77,7 +77,7 @@
         android:drawablePadding="4dp"
         android:elevation="6dp"
         android:ems="10"
-        android:hint="@string/nom_société"
+        android:hint="@string/nom_societe"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:padding="8dp"

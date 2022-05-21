@@ -2,7 +2,6 @@ package com.example.projet_petite_anonce;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,32 +46,55 @@ public class ProfilFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        modifProfil = view.findViewById(R.id.btn_modif);
 
         if(user != null){
 
             //get and display client information
-            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid());
+            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference().child(user.getUid());
             DatabaseReference pseudo = userInformation.child("pseudo");
+            DatabaseReference client = userInformation.child("client");
 
             pseudo.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     TextView pseudo_textView = view.findViewById(R.id.pseudoProfil);
                     Object pseudoTest = snapshot.getValue();
-                    if( pseudoTest != null)
-                        pseudo_textView.setText((String)pseudoTest);
+
+                    if (pseudoTest != null)
+                        pseudo_textView.setText((String) pseudoTest);
                 }
+
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
 
+            client.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String clientTest = (String) snapshot.getValue();
+                    if(clientTest != null) {
+                        if (clientTest.equals("1")) {
+                            inflater.inflate(R.layout.fragment_profil_professionnel, container, false);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
 
             //profil image
-            String imageString = user.getUid().toString();//get user id
+            String imageString = user.getUid();//get user id
 
             //each user have only one profil id, if there isn't a profil id we display buffer image
-            storageReference = FirebaseStorage.getInstance().getReference(imageString+"/profil/profil");///be carefull for the extension
+            storageReference = FirebaseStorage.getInstance().getReference(imageString+"/profil/profil");
 
             try {
                 File localeFile = File.createTempFile("tempfile", ".jpeg");
@@ -96,18 +117,23 @@ public class ProfilFragment extends Fragment {
             }
 
             //update profil
-            modifProfil = view.findViewById(R.id.btn_modif);
+        //    modifProfil = view.findViewById(R.id.btn_modif);
             modifProfil.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new com.example.projet_petite_anonce.ModifProfil()).commit();
                 }
             });
 
             //my advert
-
+            Button adverts_button = view.findViewById(R.id.btn_annonce);
+            adverts_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //transfered to list of his adverts
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AnnonceFragment()).commit();
+                }
+            });
 
 
             //sign out
@@ -116,8 +142,6 @@ public class ProfilFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     //transfered to profil account
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
                     mAuth.signOut();
                 }

@@ -9,8 +9,9 @@ public class ClientParticulier {
     private String firstname;
     private String tel;
     private String picture;
+    private String client;
 
-    public ClientParticulier(String name, String password, String mail){
+    public ClientParticulier(String name, String password, String mail, String client){
         this.pseudo = name;
         this.password = password;
         this.mail = mail;
@@ -18,8 +19,16 @@ public class ClientParticulier {
         firstname = null;
         tel = null;
         picture = null;
+        this.client = client;
     }
 
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
 
     public String getPassword() {
         return password;

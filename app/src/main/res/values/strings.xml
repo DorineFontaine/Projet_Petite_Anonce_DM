@@ -72,6 +72,17 @@
     <string name="requisLocalisation">Localisation requise !</string>
     <string name="requisPrice"> Prix requis !</string>
     <string name="requisDescription">Description requise !</string>
+    <string name="requisType">Type requis ! </string>
+    <string name="categorieTitre">Catégorie</string>
+    <string name="professionel">Professionnel</string>
+    <string name="siret">SIRET</string>
+    <string name="nom_societe">Nom de société</string>
+    <string name="supp">Supprimer</string>
+    <string name="requisSiret">SIRET requis!</string>
+    <string name="requisSociete">Nom de société requis !</string>
+    <string name="statistique">Statistique</string>
+
+
 
     <string name="oui">Oui</string>
     <string name="non">Non</string>
