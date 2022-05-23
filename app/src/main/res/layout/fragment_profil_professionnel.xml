@@ -117,7 +117,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_modif"
+                android:id="@+id/btn_modif2"
                 android:layout_below="@+id/relative"
                 android:drawableLeft="@drawable/ic_baseline_create_24"
                 android:drawableTint="@color/noirTransparent"
@@ -133,7 +133,7 @@
 
             <View
                 android:id="@+id/viewDivider"
-                android:layout_below="@+id/btn_modif"
+                android:layout_below="@+id/btn_modif2"
                 style="@style/Divider.Horizontal"/>
 
             <Button

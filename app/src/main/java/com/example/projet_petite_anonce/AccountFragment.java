@@ -40,10 +40,12 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view;
+        view =  inflater.inflate(R.layout.fragment_account, container, false);
+
 
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_account, container, false);
 
         //check if user already signed in
         //check email and password with Firebase
@@ -78,7 +80,9 @@ public class AccountFragment extends Fragment {
 
 
         }
+
         else{
+
 
             inscription = view.findViewById(R.id.inscription);
             signin_button = view.findViewById(R.id.btn_connexion);

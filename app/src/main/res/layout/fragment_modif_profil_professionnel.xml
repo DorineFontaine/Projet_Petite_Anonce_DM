@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ModifProfil">
+    tools:context=".ModifProfilProfessionnelFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -130,12 +130,33 @@
                     android:layout_below="@id/viewDivider2"
                     android:autofillHints="" />
 
+                <View
+                    android:id="@+id/viewDivider3"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/editTextNum"
+                    style="@style/Divider.Horizontal"/>
 
+
+
+
+                <EditText
+                    android:id="@+id/editTextSiret"
+                    android:minWidth="250dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:hint= "Numero de Siret"
+                    android:drawableTint="@color/noirTransparent"
+                    android:drawablePadding="10dp"
+                    android:layout_below="@id/viewDivider3"
+                    android:drawableStart="@drawable/number"
+                    android:autofillHints="" />
 
 
                 <Button
                     android:id="@+id/btn_supp"
-                    android:layout_below="@id/editTextNum"
+                    android:layout_below="@id/editTextSiret"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"

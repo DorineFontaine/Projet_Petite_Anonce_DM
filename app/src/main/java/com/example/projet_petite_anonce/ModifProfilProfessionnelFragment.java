@@ -54,7 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class ModifProfil extends Fragment {
+public class ModifProfilProfessionnelFragment extends Fragment {
 
     View view;
     FirebaseAuth mAuth;
@@ -67,13 +67,11 @@ public class ModifProfil extends Fragment {
     EditText editMail;
 
 
-    public ModifProfil() {
-        // Required empty public constructor
-    }
 
 
-    public static ModifProfil newInstance() {
-        ModifProfil fragment = new ModifProfil();
+
+    public static ModifProfilProfessionnelFragment newInstance() {
+        ModifProfilProfessionnelFragment fragment = new ModifProfilProfessionnelFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -89,7 +87,7 @@ public class ModifProfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_modif_profil, container, false);
+        View view = inflater.inflate(R.layout.fragment_modif_profil_professionnel, container, false);
         bitmap = new MutableLiveData<>();
         editMail = view.findViewById(R.id.editTextMail);
 
@@ -114,33 +112,39 @@ public class ModifProfil extends Fragment {
         if(user != null){
 
             //get and display client information
-            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid());
-            DatabaseReference pseudo = userInformation.child("pseudo");
+
+            DatabaseReference userInformationPro = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(user.getUid());
+            DatabaseReference nom_societe = userInformationPro.child("nom_societe");
+
+
 
             TextView pseudo_textView = view.findViewById(R.id.pseudoProfil);
             TextView type_profil = view.findViewById(R.id.typeProfil);
             //pseudo
-            pseudo.addValueEventListener(new ValueEventListener() {
+
+
+            nom_societe.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    Object pseudoTest = snapshot.getValue();
-                    if( pseudoTest != null){
-                        pseudo_textView.setText((String)pseudoTest);
-                        type_profil.setText(R.string.particulier);
 
+                    Object nomSocieteTest = snapshot.getValue();
+                    if( nomSocieteTest != null){
+                        pseudo_textView.setText((String)nomSocieteTest);
+                        type_profil.setText(R.string.professionel);
                     }
+
 
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
             });
 
-
-
             //mail hint
-            DatabaseReference mail = userInformation.child("mail");
+            DatabaseReference mail = userInformationPro.child("mail");
             mail.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -154,9 +158,24 @@ public class ModifProfil extends Fragment {
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
 
+            //numero de siret hint
+            DatabaseReference siret = userInformationPro.child("numero_siret");
+            siret.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    EditText editTextMail = view.findViewById(R.id.editTextSiret);
+                    Object siretTest = snapshot.getValue();
+                    if( siretTest != null)
+                        editTextMail.setHint((String)siretTest);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+
 
             //tel hint
-            DatabaseReference tel = userInformation.child("tel");
+            DatabaseReference tel = userInformationPro.child("tel");
             tel.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -205,7 +224,7 @@ public class ModifProfil extends Fragment {
                 //transfered to profil account
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfilProfessionelFragment()).commit();
             }
         });
 
