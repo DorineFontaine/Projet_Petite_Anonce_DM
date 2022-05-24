@@ -104,7 +104,7 @@ public class MessageFragment extends Fragment {
             //user signed in : it shows his conversations
 
             simpleList = (ListView) view.findViewById(R.id.listview_message);
-            CustomAdaptater customAdapter = new CustomAdaptater(getContext(),titre ,temps, prix, null,nomAcheteur,null,  R.layout.list_view_item);
+            CustomAdaptater customAdapter = new CustomAdaptater(getContext(),titre ,temps, prix, null,nomAcheteur,  R.layout.list_view_item);
             simpleList.setAdapter(customAdapter);
 
             //On met un ecouteur sur chaque élément de la liste
@@ -112,7 +112,6 @@ public class MessageFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     LinearLayout affiche = view.findViewById(R.id.linearLayout2);
-                    LinearLayout supprime = view.findViewById(R.id.supprimer);
                     ImageView imageView = view.findViewById(R.id.icon);
 
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -137,41 +136,6 @@ public class MessageFragment extends Fragment {
                             //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DiscussFragment(titre[i],temps[i],nomAcheteur[i],photo[i])).commit();
 
-                        }
-                    });
-
-                    supprime.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                            alertDialogBuilder.setMessage(R.string.suppressionMessage);
-                            alertDialogBuilder.setPositiveButton(R.string.oui,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                            // la tache à executer une fois le bouton Oui est appuyé
-                                        }
-                                    });
-
-                            alertDialogBuilder.setNegativeButton(R.string.non
-                                    ,new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface arg0, int arg1) {
-                                            // la tache à exécuter une fois le bouton est Non appuyé
-
-                                        }
-                                    });
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-                            alertDialog.show();
-
-
-
-
-
-
-
-                            /*******************************************************************************/
                         }
                     });
 

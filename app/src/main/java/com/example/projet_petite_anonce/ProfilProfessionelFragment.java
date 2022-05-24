@@ -31,13 +31,14 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 
 public class ProfilProfessionelFragment extends Fragment {
     Button modifProfil;
     FirebaseAuth mAuth;
     StorageReference storageReference;
-
+    int adverts_count;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,12 +68,30 @@ public class ProfilProfessionelFragment extends Fragment {
                         pseudo_textView.setText((String) pseudoTest);
                 }
 
-
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
 
+            //counting his adverts
+            DatabaseReference testRef = userInformation.child("MyAdvert");
+            testRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    adverts_count = 0;
+                    //Get all his adverts key  in Firebase
+                    Consumer countAdverts = new Consumer<DataSnapshot>(){
+                        public void accept(DataSnapshot snapshot2){
+                            adverts_count = adverts_count+1 ;
+                        };
+                    };
+                    snapshot.getChildren().forEach(countAdverts);
+                    TextView textNbAnnonce = view.findViewById(R.id.textNbAnnonce);
+                    textNbAnnonce.setText(String.valueOf(adverts_count));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
 
 
 

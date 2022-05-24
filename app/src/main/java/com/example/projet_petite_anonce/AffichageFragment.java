@@ -5,15 +5,27 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -27,6 +39,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 
 public class AffichageFragment extends Fragment {
@@ -38,14 +51,23 @@ public class AffichageFragment extends Fragment {
     private MapView map;
     private IMapController mapController;
 
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+    String userUID;
+    DatabaseReference favRef;
+    DatabaseReference userRef;
+
     //Supposé etre vide !!!
     public AffichageFragment(Advert advert){
         a = advert;
     }
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_affichage, container, false);
         imageAnonce = view.findViewById(R.id.imageAnnonce);
@@ -74,6 +96,83 @@ public class AffichageFragment extends Fragment {
         localisation.setText(a.getLocation());
 
         mapCreation(a.getLocation());
+
+        if(user != null){
+            userUID = user.getUid();
+            //fav button
+            ImageButton star_button = view.findViewById(R.id.etoile);
+
+            //we want to know if he is a ClientParticulier or ClientProfessionnel
+            userRef = null;
+            //check which kind of user is it
+            FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.hasChild(userUID))
+                        userRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(userUID);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+
+            if(userRef == null)
+                userRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(userUID);
+
+            //check if this is one of his adverts
+            userRef.child("MyAdvert").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
+                    for (DataSnapshot snapshot1 : list_snapshot){
+
+                        //he is
+                        if(a.getKey().equals(snapshot1.getValue().toString())){
+                            star_button.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+
+            //check if he already had it in his MyFavAdvert
+            userRef.child("MyFavAdvert").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    favRef = null;
+                    Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
+                    for (DataSnapshot snapshot1 : list_snapshot){
+                        if(a.getKey().equals(snapshot1.getValue().toString())){
+                            star_button.setImageResource(R.drawable.ic_baseline_favorite_24);
+                            favRef = snapshot1.getRef();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+
+
+            star_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(favRef != null){
+                        favRef.removeValue();
+                        star_button.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    }
+                    else{
+                        star_button.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        userRef.child("MyFavAdvert").push().setValue(a.getKey());
+                    }
+                }
+            });
+
+        }
 
         return view;
     }

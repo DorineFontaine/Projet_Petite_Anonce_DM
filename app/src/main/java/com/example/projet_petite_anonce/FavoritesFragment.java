@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -60,8 +62,8 @@ public class FavoritesFragment extends Fragment {
     String[] titre;
     Bitmap[] photo;
 
-
-
+    DatabaseReference userRef;
+    String userUID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,11 +126,29 @@ public class FavoritesFragment extends Fragment {
         else{
             //user signed in : it shows his favourites adverts
 
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            userUID = user.getUid();
+
+            userRef = null;
+            //check which kind of user is it
+            database.getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.hasChild(userUID))
+                        userRef = database.getReference("ClientParticulier").child(userUID);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+
+            if(userRef == null)
+                userRef = database.getReference("ClientProfessionnel").child(userUID);
 
             //if he already has favourite adverts
 
 
-            DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert");
+            DatabaseReference advertDirectory = userRef.child("MyFavAdvert");
 
             advertDirectory.orderByValue().addValueEventListener(new ValueEventListener() {
 
@@ -152,145 +172,93 @@ public class FavoritesFragment extends Fragment {
                    //get advert from Firebase in Annonce with keyAdverts
                    DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("Annonce");
 
-                   //Get the advert in Firebase
-                   Consumer getAdvertData = new Consumer<DataSnapshot>(){
-                       public void accept(DataSnapshot snapshot2){
+                   advertDirectory.addValueEventListener(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot snapshot) {
+                           //Get the advert in Firebase
+                           Consumer getAdvertData = new Consumer<DataSnapshot>(){
+                               public void accept(DataSnapshot snapshot2){
 
-                           if( keyIsIn(snapshot2.getKey() , keyAdverts)) {
-                               Iterable<DataSnapshot> advertsBuffer = snapshot2.getChildren();
+                                   if( keyIsIn(snapshot2.getKey() , keyAdverts)) {
+                                       Iterable<DataSnapshot> advertsBuffer = snapshot2.getChildren();
 
-                               List<String> advertChildren = new ArrayList<>();
-                               for (DataSnapshot postSnapshot: advertsBuffer) {
-                                   advertChildren.add( postSnapshot.getValue().toString());
-                               }
-                               Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(1), advertChildren.get(0), advertChildren.get(6));
-                               advert.setKey(snapshot.getKey());
+                                       List<String> advertChildren = new ArrayList<>();
+                                       for (DataSnapshot postSnapshot: advertsBuffer) {
+                                           advertChildren.add( postSnapshot.getValue().toString());
+                                       }
+                                       Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(2), advertChildren.get(0), advertChildren.get(6));
+                                       advert.setKey(snapshot2.getKey());
 
-                               //get bitmap from Storage Firebase
-                               StorageReference storageReferenceImage = FirebaseStorage.getInstance().getReference("annonce/"+advert.getKey());
+                                       //get bitmap from Storage Firebase
+                                       StorageReference storageReferenceImage = FirebaseStorage.getInstance().getReference("annonce/"+advert.getKey());
+                                       try {
+                                           File localeFile = File.createTempFile("tempfile", ".jpeg");
+                                           storageReferenceImage.getFile(localeFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 
-                               try {
-                                   File localeFile = File.createTempFile("tempfile", ".jpeg");
-                                   storageReferenceImage.getFile(localeFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                               @Override
+                                               public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                   Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
+                                                   advert.setImage(bitmap);
+                                               }
 
-                                       @Override
-                                       public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                           Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
-                                           advert.setImage(bitmap);
+                                           }).addOnFailureListener(new OnFailureListener() {
+                                               @Override
+                                               public void onFailure(@NonNull Exception e) {
+
+                                               }
+                                           });
+                                       } catch (IOException e) {
+                                           e.printStackTrace();
                                        }
 
-                                   }).addOnFailureListener(new OnFailureListener() {
-                                       @Override
-                                       public void onFailure(@NonNull Exception e) {
-                                       }
-                                   });
-                               } catch (IOException e) {
-                                   e.printStackTrace();
-                               }
+                                       adverts.add(advert);
+                                   }
 
-                               adverts.add(advert);
+                               };
+                           };
+
+                           adverts = new ArrayList<>();
+                           snapshot.getChildren().forEach(getAdvertData);
+
+                           ville = new String[adverts.size()];
+                           prix = new String[adverts.size()];
+                           temps= new String[adverts.size()];
+                           titre= new String[adverts.size()];
+                           photo= new Bitmap[adverts.size()];
+
+                           //Créer la liste des éléments d'advert
+                           for(int i = 0; i < adverts.size(); i++){
+                               Advert a = adverts.get(i);
+                               ville[i] = a.getLocation();
+                               prix[i] = a.getPrice();
+                               temps[i] = a.getDate();
+                               titre[i] = a.getTitle();
+                               photo[i] = a.getImage();
                            }
 
-                       };
-                   };
 
-                   adverts = new ArrayList<>();
-                   snapshot.getChildren().forEach(getAdvertData);
+                           if(ville.length != 0){
+                               // Implementation de la liste de favoris
+                               simpleList = (ListView) view.findViewById(R.id.listview);
+                               CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
+                               simpleList.setAdapter(customAdapter);
+                               //On met un ecouteur sur chaque élément de la liste
+                               simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                   @Override
+                                   public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                   ville = new String[adverts.size()];
-                   prix = new String[adverts.size()];
-                   temps= new String[adverts.size()];
-                   titre= new String[adverts.size()];
-                   photo= new Bitmap[adverts.size()];
+                                       getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
 
-                   //Créer la liste des éléments d'advert
-                   for(int i = 0; i < adverts.size(); i++){
-                       Advert a = adverts.get(i);
-                       ville[i] = a.getLocation();
-                       prix[i] = a.getPrice();
-                       temps[i] = "pas encore dans la bdd";
-                       titre[i] = a.getTitle();
-                       photo[i] = a.getImage(); //R.drawable pas encore dans bdd
-                   }
+                                   }
+                               });
+                           }
 
+                       }
 
-
-                   Dialog dialog = new Dialog(getContext());
-
-                   // Implementation de la liste de favoris
-                   simpleList = (ListView) view.findViewById(R.id.listview);
-                   CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre, null,  R.layout.list_view_item);
-                   simpleList.setAdapter(customAdapter);
-                   //On met un ecouteur sur chaque élément de la liste
-                   simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                        @Override
-                       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                           LinearLayout affiche = view.findViewById(R.id.linearLayout2);
-                           LinearLayout delete = view.findViewById(R.id.supprimer);
-                           ImageView imageView = view.findViewById(R.id.icon);
-
-                           imageView.setOnClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View view) {
-
-                                   FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                   FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                   //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
-                                   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
-
-
-                               }
-                           });
-
-                           affiche.setOnClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View view) {
-
-                                   FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                   FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                   //On transmet le prix le titre pour faire un affichage dynamique du coté de AffichageFragment
-                                   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
-
-                               }
-                           });
-
-                           delete.setOnClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View view) {
-                                   AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                                   alertDialogBuilder.setMessage(R.string.suppression);
-                                   alertDialogBuilder.setPositiveButton(R.string.oui,
-                                           new DialogInterface.OnClickListener() {
-                                               @Override
-                                               public void onClick(DialogInterface dialog, int which) {
-
-                                                   // delete advert from myFavAdvert in Firebase
-                                                   DatabaseReference advertDirectory = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert");
-                                                   advertDirectory.child(adverts.get(i).getKey()).removeValue();
-
-                                               }
-                                           });
-
-                                   alertDialogBuilder.setNegativeButton(R.string.non
-                                           ,new DialogInterface.OnClickListener() {
-                                               @Override
-                                               public void onClick(DialogInterface arg0, int arg1) {
-
-                                                   //doing nothing
-
-                                               }
-                                           });
-                                   AlertDialog alertDialog = alertDialogBuilder.create();
-                                   alertDialog.show();
-
-
-
-                                   /*******************************************************************************/
-                               }
-                           });
-
-                       }/****/
+                       public void onCancelled(@NonNull DatabaseError error) {}
                    });
+
                }
 
                @Override

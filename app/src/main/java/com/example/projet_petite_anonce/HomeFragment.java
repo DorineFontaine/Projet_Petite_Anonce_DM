@@ -56,9 +56,7 @@ public class HomeFragment extends Fragment {
     String[] prix;
     String[] date;
     String[] titre;
-    int[] heart;
-    Bitmap[] photo; //
-    Boolean[] favList; //true or false if advert is in fav of user or not
+    Bitmap[] photo;
     List<Advert> adverts;
 
 
@@ -70,8 +68,6 @@ public class HomeFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-
-        favoris = view.findViewById(R.id.fav);
 
         //Get all the advert in Firebase
         Consumer getAdvertData = new Consumer<DataSnapshot>(){
@@ -97,11 +93,13 @@ public class HomeFragment extends Fragment {
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
                             advert.setImage(bitmap);
+                            Log.i("ICIII", "ca fonctionne");
                         }
 
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            Log.i("ICIII", "ca fonctionne pas");
                         }
                     });
                 } catch (IOException e) {
@@ -125,8 +123,6 @@ public class HomeFragment extends Fragment {
                 date= new String[adverts.size()];
                 titre= new String[adverts.size()];
                 photo= new Bitmap[adverts.size()];
-                favList = new Boolean[adverts.size()];
-                heart = new int[adverts.size()];
 
                 //Créer la liste des éléments d'advert
                 for(int i = 0; i < adverts.size(); i++){
@@ -135,109 +131,26 @@ public class HomeFragment extends Fragment {
                     prix[i] = a.getPrice();
                     date[i] = a.getDate();
                     titre[i] = a.getTitle();
-                    photo[i] = a.getImage(); //R.drawable pas encore dans bdd
-
-
-                    if(user != null){
-                        heart[i] = R.drawable.ic_baseline_favorite_border_24;
-
-                        //check if advert is in myFavAdvert list
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myFavRef = database.getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert").child(adverts.get(i).getKey());
-
-                        int finalI = i;
-                        myFavRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot2) {
-                                heart[finalI] = R.drawable.ic_baseline_favorite_24;
-                                favList[finalI] = true;
-                                Log.i("Home Fav Babe", ""+heart[finalI]);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                heart[finalI] = R.drawable.ic_baseline_favorite_border_24;
-                                favList[finalI] = false;
-                                Log.i("Home Fav Babe", ""+heart[finalI]);
-                            }
-                        });
-
-                    }
-                    else{
-                        heart[i] = R.drawable.ic_baseline_favorite_border_24;
-
-                        favList[i] = false;
-                    }
-
-
+                    photo[i] = a.getImage();
                 }
 
-                if(ville.length != 0){
+                if(photo[adverts.size()-1] != null){
                     // Implementation de la liste de message
                     simpleList = (GridView) view.findViewById(R.id.grid_view);
-                    CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, date,photo,titre,heart, R.layout.grid_view_item);
+
+                    View viewTest = view = inflater.inflate(R.layout.grid_view_item,(ViewGroup) simpleList.getParent(), false);
+
+                    CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, date,photo,titre, R.layout.grid_view_item);
+
+
                     simpleList.setAdapter(customAdapter);
 
                     //On met un ecouteur sur chaque élément de la liste
                     simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            if(view.getId() == R.id.fav)
-                                Log.i("HomeFav", "click");
 
-                            ImageView fav = view.findViewById(R.id.fav);
-                            fav.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //check if user is connected
-                                /*if(user != null){
-                                    //check if this advert is in fav list advert user
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                    DatabaseReference myFavRef = database.getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert").child(adverts.get(i).getKey());
-
-                                    myFavRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                            //we take off the advert in his MyFavAdvert
-                                            myFavRef.removeValue();
-                                            fav.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                            //we add this advert in his MyFavAdvert
-                                            DatabaseReference favAdvertDirectory = database.getReference("ClientParticulier").child(user.getUid()).child("MyFavAdvert");
-                                            favAdvertDirectory.push().setValue(adverts.get(i).getKey());
-                                            fav.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-
-                                        }
-                                    });
-                                }
-                                else*/
-
-                                    Log.i("HomeFav", "click");
-                                    fav.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
-
-
-                                }
-                            });
-
-                            LinearLayout linearLayout = view.findViewById(R.id.affiche);
-                            linearLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
-
-
-                                }
-                            });
-
-
-
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
                         }
                     });
                 }

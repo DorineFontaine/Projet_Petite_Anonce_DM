@@ -52,6 +52,9 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 
 public class ModifProfil extends Fragment {
@@ -317,16 +320,33 @@ public class ModifProfil extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
-                        //delete ClientParticulier
-                        DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(userUID);
-                        userInformation.removeValue();
+                        DatabaseReference particulier = FirebaseDatabase.getInstance().getReference("ClientParticulier");
+                        particulier.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        userInformation = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(userUID);
-                        userInformation.removeValue();
+                                //check if he created adverts
+                                if (snapshot.hasChild(userUID))
+                                    deleteInformations(particulier, snapshot);
+                            }
 
-                        //il faut supprimer ses annonces (dans annonce et image annonce)
-                        //il faut supprimer ses annonces des listes MyFavAdvert des autres utilisateurs
-                        /********************************************************************************************/
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+
+                        DatabaseReference professionnel = FirebaseDatabase.getInstance().getReference("ClientProfessionnel");
+                        professionnel.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                //check if he created adverts
+                                if (snapshot.hasChild(userUID))
+                                    deleteInformations(professionnel, snapshot);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
 
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AccountFragment()).commit();
                     }
@@ -338,6 +358,106 @@ public class ModifProfil extends Fragment {
         });
 
         return view ;
+    }
+
+    public void deleteInformations(DatabaseReference userInformation, DataSnapshot snapshot){
+        // get adverts List
+        List<String> keyAdverts = new ArrayList<>();
+        if(snapshot.child(userUID).hasChild("MyAdvert")){
+            DatabaseReference advertsRef = userInformation.child(userUID).child("MyAdverts");
+            advertsRef.orderByKey().addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                    //get all key advert
+
+                    //Get all his adverts key  in Firebase
+                    Consumer getAdvertKey = new Consumer<DataSnapshot>(){
+                        public void accept(DataSnapshot snapshot3){
+
+                            String aBuffer = snapshot3.getValue().toString();
+                            keyAdverts.add(aBuffer);
+                        };
+                    };
+
+                    snapshot2.getChildren().forEach(getAdvertKey);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+
+            });
+        }
+
+        //delete profil picture
+        StorageReference profilPicRef = FirebaseStorage.getInstance().getReference(userUID+"/profil/profil");
+        profilPicRef.delete();
+
+        //delete adverts pictures
+        for(String advertUID : keyAdverts){
+            StorageReference profilAdvertRef = FirebaseStorage.getInstance().getReference("annonce/"+advertUID);
+            profilAdvertRef.delete();
+        }
+
+        //delete his adverts in MyFavAdverts of others users (ClientProfessionnel and ClientParticulier)
+        DatabaseReference allUsers = FirebaseDatabase.getInstance().getReference("ClientProfessionnel");
+        allUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                deleteFav(snapshotUsers, keyAdverts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        allUsers = FirebaseDatabase.getInstance().getReference("ClientParticulier");
+        allUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                deleteFav(snapshotUsers, keyAdverts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+        //delete adverts from Annonce
+        DatabaseReference annonces = FirebaseDatabase.getInstance().getReference("Annonce");
+        for(String key : keyAdverts){
+            annonces.child(key).removeValue();
+        }
+
+        //delete user information
+        userInformation.child(userUID).removeValue();
+    }
+
+    /**
+     * snapshotUsers : all users
+     * @param snapshotUsers
+     */
+    public void deleteFav(DataSnapshot snapshotUsers, List<String> keyAdverts){
+        List<DatabaseReference> refToDelete = new ArrayList<>();
+
+        Consumer deleteFavAdverts = new Consumer<DataSnapshot>(){
+            public void accept(DataSnapshot snapshot2){
+                //get the myFavAdverts from the user
+                if(snapshot2.hasChild("MyFavAdverts")){
+
+                    //List<String> favAdverts = (List<String>) snapshot2.child("MyFavAdverts").getValue();
+                    Iterable<DataSnapshot> listFav = snapshot2.child("MyFavAdverts").getChildren();
+
+                    for (DataSnapshot postSnapshot: listFav) {
+                        if(keyAdverts.contains(postSnapshot.getValue().toString()))
+                            refToDelete.add(postSnapshot.getRef());
+                    }
+                }
+            }
+        };
+
+        snapshotUsers.getChildren().forEach(deleteFavAdverts);
+
+        for (DatabaseReference toDelete : refToDelete){
+            toDelete.removeValue();
+        }
     }
 
     public void saveBitmapFirebase(View view){

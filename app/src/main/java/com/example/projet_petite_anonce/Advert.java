@@ -36,6 +36,8 @@ public class Advert {
         Date currentDate = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MMM/yyyy");
         this.date = dateFormat.format(currentDate);
+
+        image = null;
     }
 
     public String getKey(){return key;}

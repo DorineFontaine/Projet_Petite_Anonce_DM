@@ -51,10 +51,12 @@ public class AnnonceFragment extends Fragment {
     String[] temps ;
     String[] titre ;
     Bitmap[] photo ;
-
+    String userUID;
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    DatabaseReference userRef;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,10 +68,29 @@ public class AnnonceFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         if(user != null){
+            userUID = user.getUid();
+
 
             //check if he has advert is in myAdvert list
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myFavDirectoryRef = database.getReference("ClientParticulier").child(user.getUid()).child("MyAdvert");
+
+            userRef = null;
+            //check which kind of user is it
+            database.getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.hasChild(userUID))
+                        userRef = database.getReference("ClientParticulier").child(userUID).child("MyAdvert");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+
+            if(userRef == null)
+                userRef = database.getReference("ClientProfessionnel").child(userUID).child("MyAdvert");
+
+            DatabaseReference myFavDirectoryRef = userRef;
 
             myFavDirectoryRef.orderByKey().addValueEventListener(new ValueEventListener() {
                 @Override
@@ -138,7 +159,6 @@ public class AnnonceFragment extends Fragment {
                                         myAdverts.add(advert);
                                     }
 
-
                                 }
                             };
                             snapshot.getChildren().forEach(getAdvertKey);
@@ -158,11 +178,10 @@ public class AnnonceFragment extends Fragment {
                             }
 
                             if(!myAdverts.isEmpty()){
-                                Toast.makeText(view.getContext(), "Hell YEAH", Toast.LENGTH_SHORT).show();
 
                                 // Implementation de la liste des articles
                                 simpleList = (ListView) view.findViewById(R.id.listview);
-                                CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, temps,photo,titre,null,  R.layout.list_view_item);
+                                CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
                                 simpleList.setAdapter(customAdapter);
                                 //On met un ecouteur sur chaque élément de la liste
                                 simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -172,8 +191,6 @@ public class AnnonceFragment extends Fragment {
                                     }
                                 });
                             }
-                            else
-                                Toast.makeText(view.getContext(), "Hell no", Toast.LENGTH_SHORT).show();
 
                         }
 

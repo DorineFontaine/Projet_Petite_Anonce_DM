@@ -10,16 +10,7 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <ImageView
-        android:id="@+id/fav"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_gravity="right"
-        android:minWidth="48dp"
-        android:clickable="true"
-        android:minHeight="48dp"
-        app:srcCompat="@drawable/ic_baseline_favorite_24"
-        tools:ignore="SpeakableTextPresentCheck" />
+
 
     <LinearLayout
         android:id="@+id/affiche"

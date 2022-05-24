@@ -197,7 +197,7 @@
                 android:text="@string/aide"
                 android:textColor="@color/grey" />
             <View
-                android:id="@+id/viewDivider5"
+                android:id="@+id/viewDivider4"
                 android:layout_below="@+id/btn_aide"
                 style="@style/Divider.Horizontal"/>
 
@@ -220,8 +220,8 @@
                 android:textColor="@color/grey" />
 
             <View
-                android:id="@+id/viewDivider4"
-                android:layout_below="@+id/btn_aide"
+                android:id="@+id/viewDivider5"
+                android:layout_below="@+id/btn_statistique"
                 style="@style/Divider.Horizontal"/>
 
             <Button
@@ -229,7 +229,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_statistique"
+                android:layout_below="@+id/viewDivider5"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
