@@ -82,6 +82,7 @@ public class AddFragment extends Fragment {
     RadioButton actualEtat;
     MutableLiveData<Bitmap> bitmap ;
     Uri imageUri;
+    Boolean location_validate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,6 +98,8 @@ public class AddFragment extends Fragment {
 
         if(user == null){
             //show a connexion button
+
+            location_validate = false;
 
             //we create an relativelayout (new view)
             RelativeLayout frameLayout = new RelativeLayout(view.getContext());
@@ -215,7 +218,7 @@ public class AddFragment extends Fragment {
                         editTextDescription.requestFocus();
                         return;
                     }
-                    if(localisation.isEmpty()){
+                    if(localisation.isEmpty() && location_validate){
                         editTextLocalisation.setError(getResources().getString(R.string.requisLocalisation));
                         editTextLocalisation.requestFocus();
                         return;
@@ -225,6 +228,20 @@ public class AddFragment extends Fragment {
                         editTextLocalisation.requestFocus();
                         return;
                     }
+
+                    //change some details
+
+                    //place : first letter in uppercase and the rest lowercase
+                    localisation = localisation.toLowerCase(Locale.ROOT);
+                    String firstLetter = String.valueOf(localisation.charAt(0)).toUpperCase(Locale.ROOT);
+                    if(localisation.length() > 1)
+                        localisation = firstLetter+localisation.substring(1);
+                    else
+                        localisation = firstLetter;
+
+
+                    //add € to the price
+                    price = price+" €";
 
 
                     Advert advert = new Advert(title,price,localisation,des, type, etat);
@@ -336,7 +353,7 @@ public class AddFragment extends Fragment {
             //on recentre la map sur le marker
             mapController.setCenter(new GeoPoint(latitude, longitude));
 
-
+            location_validate = true;
 
             ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(getActivity().getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 
@@ -359,6 +376,9 @@ public class AddFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(view.getContext(), "Veuillez entrer une adresse valide svp", Toast.LENGTH_SHORT).show();
+
+            //clean the location
+            editTextLocalisation.setText("");
         }
 
 

@@ -160,14 +160,15 @@
         android:layout_gravity="center"
         android:background="@color/saumon"
         android:text="@string/modif" />
-
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_change"
+        android:layout_below="@id/map"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:backgroundTint="@color/white"
-        android:text="@string/sup" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/saumon"
+        android:text="@string/modif"
+        app:cornerRadius="50dp" />
 
 </LinearLayout>

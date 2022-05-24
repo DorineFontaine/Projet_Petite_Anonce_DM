@@ -81,7 +81,8 @@
     <string name="requisSiret">SIRET requis!</string>
     <string name="requisSociete">Nom de société requis !</string>
     <string name="statistique">Statistique</string>
-
+    <string name="supp_annonce">Supprimer l\'annonce</string>
+    <string name="modif_annonce">Modifier l\'annonce</string>
 
     <string name="oui">Oui</string>
     <string name="non">Non</string>

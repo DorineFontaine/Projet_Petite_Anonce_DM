@@ -35,7 +35,7 @@ public class Advert {
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MMM/yyyy");
-        this.date = dateFormat.format(currentDate);
+        this.date = dateFormat.format(currentDate).replace("/", "");
 
         image = null;
     }

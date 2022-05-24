@@ -8,13 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,6 +61,10 @@ public class AnnonceFragment extends Fragment {
     FirebaseUser user;
     DatabaseReference userRef;
 
+    MutableLiveData<Bitmap> bitmapBuffer ;
+    int display;
+    int loading;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +78,19 @@ public class AnnonceFragment extends Fragment {
         if(user != null){
             userUID = user.getUid();
 
+            bitmapBuffer = new MutableLiveData<>();
+            bitmapBuffer.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+                @Override
+                public void onChanged(Bitmap newBitmap) {
+                    loading++;
+
+                    if(display == loading){
+                        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.GONE);
+                        displayList(inflater);
+                    }
+                }
+            });
 
             //check if he has advert is in myAdvert list
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -98,6 +119,15 @@ public class AnnonceFragment extends Fragment {
 
                     //get all key advert
                     List<String> keyAdverts = new ArrayList<>();
+
+                    Iterable<DataSnapshot> iterableSnapshot = snapshot.getChildren();
+                    loading = 0;
+                    display = 0;
+
+                    for (DataSnapshot snapshotBuffer : iterableSnapshot){
+                        display++;
+                    }
+
 
                     //Get all his adverts key  in Firebase
                     Consumer getAdvertKey = new Consumer<DataSnapshot>(){
@@ -129,10 +159,9 @@ public class AnnonceFragment extends Fragment {
                                         List<String> advertChildren = new ArrayList<>();
                                         for (DataSnapshot postSnapshot: advertsBuffer) {
                                             advertChildren.add( postSnapshot.getValue().toString());
-                                            Log.i("INFO3", postSnapshot.getValue().toString());
                                         }
                                         Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(1), advertChildren.get(0), advertChildren.get(6));
-                                        advert.setKey(snapshot.getKey());
+                                        advert.setKey(snapshot2.getKey());
 
                                         //get bitmap from Storage Firebase
                                         StorageReference storageReferenceImage = FirebaseStorage.getInstance().getReference("annonce/"+advert.getKey());
@@ -145,6 +174,9 @@ public class AnnonceFragment extends Fragment {
                                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                                     Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
                                                     advert.setImage(bitmap);
+
+                                                    bitmapBuffer.setValue(bitmap);
+
                                                 }
 
                                             }).addOnFailureListener(new OnFailureListener() {
@@ -155,42 +187,12 @@ public class AnnonceFragment extends Fragment {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-
                                         myAdverts.add(advert);
                                     }
 
                                 }
                             };
                             snapshot.getChildren().forEach(getAdvertKey);
-
-                            ville = new String[myAdverts.size()];
-                            prix = new String[myAdverts.size()];
-                            temps = new String[myAdverts.size()];
-                            photo = new Bitmap[myAdverts.size()];
-                            titre = new String[myAdverts.size()];
-
-                            for( int i = 0 ; i < myAdverts.size() ; i++){
-                                ville[i] = myAdverts.get(i).getLocation();
-                                prix[i] = myAdverts.get(i).getPrice();
-                                temps[i] = myAdverts.get(i).getDate();
-                                photo[i] = myAdverts.get(i).getImage();
-                                titre[i] = myAdverts.get(i).getTitle();
-                            }
-
-                            if(!myAdverts.isEmpty()){
-
-                                // Implementation de la liste des articles
-                                simpleList = (ListView) view.findViewById(R.id.listview);
-                                CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
-                                simpleList.setAdapter(customAdapter);
-                                //On met un ecouteur sur chaque élément de la liste
-                                simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(myAdverts.get(i))).commit();
-                                    }
-                                });
-                            }
 
                         }
 
@@ -213,6 +215,36 @@ public class AnnonceFragment extends Fragment {
         }
 
         return view;
+    }
+
+    public void displayList(LayoutInflater inflater){
+
+        ville = new String[myAdverts.size()];
+        prix = new String[myAdverts.size()];
+        temps = new String[myAdverts.size()];
+        photo = new Bitmap[myAdverts.size()];
+        titre = new String[myAdverts.size()];
+
+        for( int i = 0 ; i < myAdverts.size() ; i++){
+            Advert a = myAdverts.get(i);
+            ville[i] = a.getLocation();
+            prix[i] = a.getPrice();
+            temps[i] = a.getDate();
+            titre[i] = a.getTitle();
+            photo[i] = a.getImage();
+        }
+
+        // Implementation de la liste des articles
+        simpleList = (ListView) view.findViewById(R.id.listview);
+        CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
+        simpleList.setAdapter(customAdapter);
+        //On met un ecouteur sur chaque élément de la liste
+        simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(myAdverts.get(i))).commit();
+            }
+        });
     }
 
     public Boolean keyIsIn(String key , List<String> keyList){

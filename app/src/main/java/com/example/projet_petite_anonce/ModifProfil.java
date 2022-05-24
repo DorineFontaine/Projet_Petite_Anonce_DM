@@ -364,13 +364,13 @@ public class ModifProfil extends Fragment {
         // get adverts List
         List<String> keyAdverts = new ArrayList<>();
         if(snapshot.child(userUID).hasChild("MyAdvert")){
-            DatabaseReference advertsRef = userInformation.child(userUID).child("MyAdverts");
+            DatabaseReference advertsRef = userInformation.child(userUID).child("MyAdvert");
             advertsRef.orderByKey().addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot2) {
                     //get all key advert
 
-                    //Get all his adverts key  in Firebase
+                    //Get all his adverts key in Firebase
                     Consumer getAdvertKey = new Consumer<DataSnapshot>(){
                         public void accept(DataSnapshot snapshot3){
 
@@ -440,10 +440,10 @@ public class ModifProfil extends Fragment {
         Consumer deleteFavAdverts = new Consumer<DataSnapshot>(){
             public void accept(DataSnapshot snapshot2){
                 //get the myFavAdverts from the user
-                if(snapshot2.hasChild("MyFavAdverts")){
+                if(snapshot2.hasChild("MyFavAdvert")){
 
                     //List<String> favAdverts = (List<String>) snapshot2.child("MyFavAdverts").getValue();
-                    Iterable<DataSnapshot> listFav = snapshot2.child("MyFavAdverts").getChildren();
+                    Iterable<DataSnapshot> listFav = snapshot2.child("MyFavAdvert").getChildren();
 
                     for (DataSnapshot postSnapshot: listFav) {
                         if(keyAdverts.contains(postSnapshot.getValue().toString()))

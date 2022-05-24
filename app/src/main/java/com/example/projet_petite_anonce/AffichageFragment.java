@@ -1,5 +1,8 @@
 package com.example.projet_petite_anonce;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -99,8 +104,9 @@ public class AffichageFragment extends Fragment {
 
         if(user != null){
             userUID = user.getUid();
-            //fav button
+            //fav and share/delete buttons (depends if this is his advert)
             ImageButton star_button = view.findViewById(R.id.etoile);
+            Button share = view.findViewById(R.id.btn_contacter);
 
             //we want to know if he is a ClientParticulier or ClientProfessionnel
             userRef = null;
@@ -130,6 +136,81 @@ public class AffichageFragment extends Fragment {
                         //he is
                         if(a.getKey().equals(snapshot1.getValue().toString())){
                             star_button.setVisibility(View.INVISIBLE);
+
+                            //change contact button into modif button
+                            share.setText(R.string.modif_annonce);
+                            share.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                        /**************************************************************************************/
+                                }
+                            });
+
+                            Dialog dialog = new Dialog(getContext());
+
+                            Button delete_btn = view.findViewById(R.id.btn_supp);
+                            delete_btn.setVisibility(View.VISIBLE);
+
+                            delete_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                                    alertDialogBuilder.setMessage(R.string.suppression);
+                                    alertDialogBuilder.setPositiveButton(R.string.oui,
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    // delete advert in myAdvert in Firebase
+                                                    snapshot1.getRef().removeValue();
+
+                                                    //delete advert in MyFavAdvert of users
+                                                    //delete his advert in MyFavAdverts of others users (ClientProfessionnel and ClientParticulier)
+                                                    DatabaseReference allUsers = FirebaseDatabase.getInstance().getReference("ClientProfessionnel");
+                                                    allUsers.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                                                            deleteFav(snapshotUsers, a.getKey());
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {}
+                                                    });
+                                                    allUsers = FirebaseDatabase.getInstance().getReference("ClientParticulier");
+                                                    allUsers.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                                                            deleteFav(snapshotUsers, a.getKey());
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {}
+                                                    });
+
+                                                    //delete advert's picture in Firebase Storage
+                                                    StorageReference pictureRef = FirebaseStorage.getInstance().getReference("annonce/"+a.getKey());
+                                                    pictureRef.delete();
+
+                                                    //delete in annonce
+                                                    DatabaseReference annonces = FirebaseDatabase.getInstance().getReference("Annonce");
+                                                    annonces.child(a.getKey()).removeValue();
+                                                }
+                                            });
+
+                                    alertDialogBuilder.setNegativeButton(R.string.non
+                                            ,new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                                    //doing nothing
+
+                                                }
+                                            });
+                                    AlertDialog alertDialog = alertDialogBuilder.create();
+                                    alertDialog.show();
+                                }
+                            });
+
                         }
                     }
                 }
@@ -250,6 +331,36 @@ public class AffichageFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+    }
+
+    /**
+     * snapshotUsers : all users
+     * @param snapshotUsers
+     */
+    public void deleteFav(DataSnapshot snapshotUsers, String keyAdvert){
+        List<DatabaseReference> refToDelete = new ArrayList<>();
+
+        Consumer deleteFavAdverts = new Consumer<DataSnapshot>(){
+            public void accept(DataSnapshot snapshot2){
+                //get the myFavAdverts from the user
+                if(snapshot2.hasChild("MyFavAdvert")){
+
+                    //List<String> favAdverts = (List<String>) snapshot2.child("MyFavAdverts").getValue();
+                    Iterable<DataSnapshot> listFav = snapshot2.child("MyFavAdvert").getChildren();
+
+                    for (DataSnapshot postSnapshot: listFav) {
+                        if(keyAdvert.equals(postSnapshot.getValue().toString()))
+                            refToDelete.add(postSnapshot.getRef());
+                    }
+                }
+            }
+        };
+
+        snapshotUsers.getChildren().forEach(deleteFavAdverts);
+
+        for (DatabaseReference toDelete : refToDelete){
+            toDelete.removeValue();
+        }
     }
 
 }

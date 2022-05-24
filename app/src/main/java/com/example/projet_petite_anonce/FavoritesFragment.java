@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +67,10 @@ public class FavoritesFragment extends Fragment {
 
     DatabaseReference userRef;
     String userUID;
+
+    MutableLiveData<Bitmap> bitmapBuffer ;
+    int display;
+    int loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,6 +133,19 @@ public class FavoritesFragment extends Fragment {
         else{
             //user signed in : it shows his favourites adverts
 
+            bitmapBuffer = new MutableLiveData<>();
+            bitmapBuffer.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+                @Override
+                public void onChanged(Bitmap newBitmap) {
+                    loading++;
+                    if(display == loading){
+                        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.GONE);
+                        displayList(inflater);
+                    }
+                }
+            });
+
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             userUID = user.getUid();
 
@@ -157,6 +177,14 @@ public class FavoritesFragment extends Fragment {
 
                    //Get favourites keys adverts
                    List<String> keyAdverts = new ArrayList<>();
+
+                   Iterable<DataSnapshot> iterableSnapshot = snapshot.getChildren();
+                   loading = 0;
+                   display = 0;
+
+                   for (DataSnapshot snapshotBuffer : iterableSnapshot){
+                       display++;
+                   }
 
                    //Get all his adverts key  in Firebase
                    Consumer getAdvertKey = new Consumer<DataSnapshot>(){
@@ -199,6 +227,7 @@ public class FavoritesFragment extends Fragment {
                                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                                    Bitmap bitmap = BitmapFactory.decodeFile(localeFile.getAbsolutePath());
                                                    advert.setImage(bitmap);
+                                                   bitmapBuffer.setValue(bitmap);
                                                }
 
                                            }).addOnFailureListener(new OnFailureListener() {
@@ -220,39 +249,6 @@ public class FavoritesFragment extends Fragment {
                            adverts = new ArrayList<>();
                            snapshot.getChildren().forEach(getAdvertData);
 
-                           ville = new String[adverts.size()];
-                           prix = new String[adverts.size()];
-                           temps= new String[adverts.size()];
-                           titre= new String[adverts.size()];
-                           photo= new Bitmap[adverts.size()];
-
-                           //Créer la liste des éléments d'advert
-                           for(int i = 0; i < adverts.size(); i++){
-                               Advert a = adverts.get(i);
-                               ville[i] = a.getLocation();
-                               prix[i] = a.getPrice();
-                               temps[i] = a.getDate();
-                               titre[i] = a.getTitle();
-                               photo[i] = a.getImage();
-                           }
-
-
-                           if(ville.length != 0){
-                               // Implementation de la liste de favoris
-                               simpleList = (ListView) view.findViewById(R.id.listview);
-                               CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
-                               simpleList.setAdapter(customAdapter);
-                               //On met un ecouteur sur chaque élément de la liste
-                               simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                   @Override
-                                   public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                                       getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
-
-                                   }
-                               });
-                           }
-
                        }
 
                        @Override
@@ -269,6 +265,39 @@ public class FavoritesFragment extends Fragment {
         }
 
        return view;
+    }
+
+    public void displayList(LayoutInflater inflater){
+
+        ville = new String[adverts.size()];
+        prix = new String[adverts.size()];
+        temps= new String[adverts.size()];
+        titre= new String[adverts.size()];
+        photo= new Bitmap[adverts.size()];
+
+        //Créer la liste des éléments d'advert
+        for(int i = 0; i < adverts.size(); i++){
+            Advert a = adverts.get(i);
+            ville[i] = a.getLocation();
+            prix[i] = a.getPrice();
+            temps[i] = a.getDate();
+            titre[i] = a.getTitle();
+            photo[i] = a.getImage();
+        }
+
+        // Implementation de la liste de favoris
+        simpleList = (ListView) view.findViewById(R.id.listview);
+        CustomAdaptater customAdapter = new CustomAdaptater(getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
+        simpleList.setAdapter(customAdapter);
+        //On met un ecouteur sur chaque élément de la liste
+        simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
+
+            }
+        });
     }
 
     public Boolean keyIsIn(String key , List<String> keyList){
