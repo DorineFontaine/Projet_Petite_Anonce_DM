@@ -12,17 +12,6 @@ public class Advert {
     Image is a bitmap
      */
 
- /*   public Advert(String image ,String title, String ownername,String price,String location,String date, String category,String description,String contact){
-        this.image = image;
-        this.title = title;
-        this.ownername = ownername;
-        this.price = price;
-        this.location = location;
-        this.date = date;
-        this.category = category;
-        this.description = description;
-        this.contact = contact;
-    }*/
 
     public Advert(String title,String price,String location,String description, String category, String state){
 

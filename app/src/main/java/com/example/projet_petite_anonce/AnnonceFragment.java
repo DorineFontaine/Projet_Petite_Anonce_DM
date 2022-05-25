@@ -242,7 +242,13 @@ public class AnnonceFragment extends Fragment {
         simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(myAdverts.get(i))).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment()).commit();
+
+                try {
+                    GeneralFunction.sendInfos(myAdverts.get(i), getParentFragmentManager());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

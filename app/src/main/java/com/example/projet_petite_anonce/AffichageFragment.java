@@ -62,10 +62,7 @@ public class AffichageFragment extends Fragment {
     DatabaseReference favRef;
     DatabaseReference userRef;
 
-    //Supposé etre vide !!!
-    public AffichageFragment(Advert advert){
-        a = advert;
-    }
+    public AffichageFragment(){}
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,180 +77,184 @@ public class AffichageFragment extends Fragment {
         textTitre = view.findViewById(R.id.titre);
         textDate = view.findViewById(R.id.date);
 
-        textDate.setText(a.getDate());
-        textPrix.setText(a.getPrice());
-        imageAnonce.setImageBitmap(a.getImage());
-        textTitre.setText(a.getTitle());
+        getParentFragmentManager().setFragmentResultListener("affiche", this, (requestKey, bundle) -> {
+            a = GeneralFunction.getInfos(bundle);
 
-        Button nombreImage = view.findViewById(R.id.nombreImage);
-        nombreImage.setText("1/1");
+            textDate.setText(a.getDate());
+            textPrix.setText(a.getPrice());
+            imageAnonce.setImageBitmap(a.getImage());
+            textTitre.setText(a.getTitle());
 
-        TextView description = view.findViewById(R.id.description);
-        description.setText(a.getDescription());
+            Button nombreImage = view.findViewById(R.id.nombreImage);
+            nombreImage.setText("1/1");
 
-        TextView etat = view.findViewById(R.id.etatAnnonce);
-        etat.setText(a.getState());
+            TextView description = view.findViewById(R.id.description);
+            description.setText(a.getDescription());
 
-        TextView categorie = view.findViewById(R.id.categorieAnnonce);
-        categorie.setText(a.getCategory());
+            TextView etat = view.findViewById(R.id.etatAnnonce);
+            etat.setText(a.getState());
 
-        TextView localisation = view.findViewById(R.id.localisation);
-        localisation.setText(a.getLocation());
+            TextView categorie = view.findViewById(R.id.categorieAnnonce);
+            categorie.setText(a.getCategory());
 
-        mapCreation(a.getLocation());
+            TextView localisation = view.findViewById(R.id.localisation);
+            localisation.setText(a.getLocation());
 
-        if(user != null){
-            userUID = user.getUid();
-            //fav and share/delete buttons (depends if this is his advert)
-            ImageButton star_button = view.findViewById(R.id.etoile);
-            Button share = view.findViewById(R.id.btn_contacter);
+            mapCreation(a.getLocation());
 
-            //we want to know if he is a ClientParticulier or ClientProfessionnel
-            userRef = null;
-            //check which kind of user is it
-            FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.hasChild(userUID))
-                        userRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(userUID);
-                }
+            if(user != null){
+                userUID = user.getUid();
+                //fav and share/delete buttons (depends if this is his advert)
+                ImageButton star_button = view.findViewById(R.id.etoile);
+                Button share = view.findViewById(R.id.btn_contacter);
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) { }
-            });
+                //we want to know if he is a ClientParticulier or ClientProfessionnel
+                userRef = null;
+                //check which kind of user is it
+                FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild(userUID))
+                            userRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(userUID);
+                    }
 
-            if(userRef == null)
-                userRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(userUID);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) { }
+                });
 
-            //check if this is one of his adverts
-            userRef.child("MyAdvert").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(userRef == null)
+                    userRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(userUID);
 
-                    Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
-                    for (DataSnapshot snapshot1 : list_snapshot){
+                //check if this is one of his adverts
+                userRef.child("MyAdvert").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        //he is
-                        if(a.getKey().equals(snapshot1.getValue().toString())){
-                            star_button.setVisibility(View.INVISIBLE);
+                        Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
+                        for (DataSnapshot snapshot1 : list_snapshot){
 
-                            //change contact button into modif button
-                            share.setText(R.string.modif_annonce);
-                            share.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                            //he is
+                            if(a.getKey().equals(snapshot1.getValue().toString())){
+                                star_button.setVisibility(View.INVISIBLE);
+
+                                //change contact button into modif button
+                                share.setText(R.string.modif_annonce);
+                                share.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
                                         /**************************************************************************************/
-                                }
-                            });
+                                    }
+                                });
 
-                            Dialog dialog = new Dialog(getContext());
+                                Dialog dialog = new Dialog(getContext());
 
-                            Button delete_btn = view.findViewById(R.id.btn_supp);
-                            delete_btn.setVisibility(View.VISIBLE);
+                                Button delete_btn = view.findViewById(R.id.btn_supp);
+                                delete_btn.setVisibility(View.VISIBLE);
 
-                            delete_btn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                                    alertDialogBuilder.setMessage(R.string.suppression);
-                                    alertDialogBuilder.setPositiveButton(R.string.oui,
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
+                                delete_btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                                        alertDialogBuilder.setMessage(R.string.suppression);
+                                        alertDialogBuilder.setPositiveButton(R.string.oui,
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
 
-                                                    // delete advert in myAdvert in Firebase
-                                                    snapshot1.getRef().removeValue();
+                                                        // delete advert in myAdvert in Firebase
+                                                        snapshot1.getRef().removeValue();
 
-                                                    //delete advert in MyFavAdvert of users
-                                                    //delete his advert in MyFavAdverts of others users (ClientProfessionnel and ClientParticulier)
-                                                    DatabaseReference allUsers = FirebaseDatabase.getInstance().getReference("ClientProfessionnel");
-                                                    allUsers.addValueEventListener(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
-                                                            deleteFav(snapshotUsers, a.getKey());
-                                                        }
+                                                        //delete advert in MyFavAdvert of users
+                                                        //delete his advert in MyFavAdverts of others users (ClientProfessionnel and ClientParticulier)
+                                                        DatabaseReference allUsers = FirebaseDatabase.getInstance().getReference("ClientProfessionnel");
+                                                        allUsers.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                                                                deleteFav(snapshotUsers, a.getKey());
+                                                            }
 
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {}
-                                                    });
-                                                    allUsers = FirebaseDatabase.getInstance().getReference("ClientParticulier");
-                                                    allUsers.addValueEventListener(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
-                                                            deleteFav(snapshotUsers, a.getKey());
-                                                        }
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {}
+                                                        });
+                                                        allUsers = FirebaseDatabase.getInstance().getReference("ClientParticulier");
+                                                        allUsers.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshotUsers) {
+                                                                deleteFav(snapshotUsers, a.getKey());
+                                                            }
 
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {}
-                                                    });
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {}
+                                                        });
 
-                                                    //delete advert's picture in Firebase Storage
-                                                    StorageReference pictureRef = FirebaseStorage.getInstance().getReference("annonce/"+a.getKey());
-                                                    pictureRef.delete();
+                                                        //delete advert's picture in Firebase Storage
+                                                        StorageReference pictureRef = FirebaseStorage.getInstance().getReference("annonce/"+a.getKey());
+                                                        pictureRef.delete();
 
-                                                    //delete in annonce
-                                                    DatabaseReference annonces = FirebaseDatabase.getInstance().getReference("Annonce");
-                                                    annonces.child(a.getKey()).removeValue();
-                                                }
-                                            });
+                                                        //delete in annonce
+                                                        DatabaseReference annonces = FirebaseDatabase.getInstance().getReference("Annonce");
+                                                        annonces.child(a.getKey()).removeValue();
+                                                    }
+                                                });
 
-                                    alertDialogBuilder.setNegativeButton(R.string.non
-                                            ,new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface arg0, int arg1) {
+                                        alertDialogBuilder.setNegativeButton(R.string.non
+                                                ,new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface arg0, int arg1) {
 
-                                                    //doing nothing
+                                                        //doing nothing
 
-                                                }
-                                            });
-                                    AlertDialog alertDialog = alertDialogBuilder.create();
-                                    alertDialog.show();
-                                }
-                            });
+                                                    }
+                                                });
+                                        AlertDialog alertDialog = alertDialogBuilder.create();
+                                        alertDialog.show();
+                                    }
+                                });
 
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
 
-            //check if he already had it in his MyFavAdvert
-            userRef.child("MyFavAdvert").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    favRef = null;
-                    Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
-                    for (DataSnapshot snapshot1 : list_snapshot){
-                        if(a.getKey().equals(snapshot1.getValue().toString())){
+                //check if he already had it in his MyFavAdvert
+                userRef.child("MyFavAdvert").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        favRef = null;
+                        Iterable<DataSnapshot> list_snapshot = snapshot.getChildren();
+                        for (DataSnapshot snapshot1 : list_snapshot){
+                            if(a.getKey().equals(snapshot1.getValue().toString())){
+                                star_button.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                favRef = snapshot1.getRef();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+
+
+                star_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if(favRef != null){
+                            favRef.removeValue();
+                            star_button.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                        }
+                        else{
                             star_button.setImageResource(R.drawable.ic_baseline_favorite_24);
-                            favRef = snapshot1.getRef();
+                            userRef.child("MyFavAdvert").push().setValue(a.getKey());
                         }
                     }
-                }
+                });
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });
-
-
-            star_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if(favRef != null){
-                        favRef.removeValue();
-                        star_button.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                    }
-                    else{
-                        star_button.setImageResource(R.drawable.ic_baseline_favorite_24);
-                        userRef.child("MyFavAdvert").push().setValue(a.getKey());
-                    }
-                }
-            });
-
-        }
+            }
+        });
 
         return view;
     }

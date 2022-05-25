@@ -294,8 +294,13 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment(adverts.get(i))).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment()).commit();
 
+                try {
+                    GeneralFunction.sendInfos(adverts.get(i), getParentFragmentManager());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
