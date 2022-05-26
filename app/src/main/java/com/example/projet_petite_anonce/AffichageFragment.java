@@ -311,15 +311,16 @@ public class AffichageFragment extends Fragment {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                Object telTest = snapshot.getValue();
+                                String telTest = snapshot.getValue().toString();
 
                                 if (telTest != null) {
                                     Log.d("TELEPHONE","j ai un  tel ");
-                                    askPermissionAndCall((String) telTest);
+                                    askPermissionAndCall(telTest);
                                 } else {
                                     Log.d("TELEPHONE","je n'est pas de tel ");
                                     sendMail(ownerid,annonce);
                                 }
+
                             }
 
 
@@ -514,9 +515,6 @@ public class AffichageFragment extends Fragment {
                     i.putExtra(Intent.EXTRA_TEXT   , "Bonjour je suis trés intérréssé par votre annonce");
 
                 }
-
-
-
 
             }
 

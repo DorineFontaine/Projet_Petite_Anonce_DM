@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,8 +71,7 @@ public class HomeFragment extends Fragment {
     int loading;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -90,6 +90,18 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        //when he clicked on filters button
+        Button filters = view.findViewById(R.id.button3);
+        filters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeFiltersDialog filtersDialog = new HomeFiltersDialog();
+
+                filtersDialog.show(getActivity().getSupportFragmentManager(), filtersDialog.getTag());
+            }
+        });
+
 
         //Get all the advert in Firebase
         Consumer getAdvertData = new Consumer<DataSnapshot>(){
