@@ -160,7 +160,7 @@ public class AnnonceFragment extends Fragment {
                                         for (DataSnapshot postSnapshot: advertsBuffer) {
                                             advertChildren.add( postSnapshot.getValue().toString());
                                         }
-                                        Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(1), advertChildren.get(0), advertChildren.get(6));
+                                        Advert advert = new Advert(advertChildren.get(7), advertChildren.get(5), advertChildren.get(4), advertChildren.get(1), advertChildren.get(0), advertChildren.get(6),user.getUid());
                                         advert.setKey(snapshot2.getKey());
 
                                         //get bitmap from Storage Firebase

@@ -1,14 +1,19 @@
 package com.example.projet_petite_anonce;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -56,12 +61,14 @@ public class AffichageFragment extends Fragment {
     Advert a;
     private MapView map;
     private IMapController mapController;
-
+    private static final int MY_PERMISSION_REQUEST_CODE_CALL_PHONE = 555;
     FirebaseAuth mAuth;
     FirebaseUser user;
     String userUID;
     DatabaseReference favRef;
     DatabaseReference userRef;
+    DatabaseReference userAdvertRef;
+    Button contacter;
 
     public AffichageFragment(){}
 
@@ -77,6 +84,7 @@ public class AffichageFragment extends Fragment {
         textPrix = view.findViewById(R.id.prix);
         textTitre = view.findViewById(R.id.titre);
         textDate = view.findViewById(R.id.date);
+        contacter = view.findViewById(R.id.btn_contacter);
 
         getParentFragmentManager().setFragmentResultListener("affiche", this, (requestKey, bundle) -> {
             a = GeneralFunction.getInfos(bundle);
@@ -264,6 +272,88 @@ public class AffichageFragment extends Fragment {
             }
         });
 
+        //Contact with the seller
+
+        contacter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //the user can choose to contact the seller by email or telephone
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setMessage(R.string.contact_vendeur);
+                alertDialogBuilder.setPositiveButton(R.string.Ptel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        String ownerid = a.getOwnerid();
+                        String annonce = a.getTitle();
+                        Log.d("OWNERID" ,ownerid);
+
+
+                        //we want to know if he is a ClientParticulier or ClientProfessionnel
+                        userAdvertRef = null;
+                        //check which kind of user is it
+                        FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.hasChild(ownerid))
+                                    userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(ownerid);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) { }
+                        });
+
+                        if(userAdvertRef == null)
+                            userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(ownerid);
+
+                        userAdvertRef.child("tel").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                Object telTest = snapshot.getValue();
+
+                                if (telTest != null) {
+                                    Log.d("TELEPHONE","j ai un  tel ");
+                                    askPermissionAndCall((String) telTest);
+                                } else {
+                                    Log.d("TELEPHONE","je n'est pas de tel ");
+                                    sendMail(ownerid,annonce);
+                                }
+                            }
+
+
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
+
+
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton(R.string.Pmail,new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String ownerid = a.getOwnerid();
+                        String annonce = a.getTitle();
+                        sendMail(ownerid, annonce);
+
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+            }
+        });
+
         return view;
     }
 
@@ -371,5 +461,77 @@ public class AffichageFragment extends Fragment {
             toDelete.removeValue();
         }
     }
+    private void askPermissionAndCall(String phoneNumber) {
+
+        // With Android Level >= 23, you have to ask the user
+        // for permission to Call.
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) { // 23
+
+            // Check if we have Call permission
+            int sendSmsPermisson = ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.CALL_PHONE);
+
+            if (sendSmsPermisson != PackageManager.PERMISSION_GRANTED) {
+                // If don't have permission so prompt the user.
+                this.requestPermissions(
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        MY_PERMISSION_REQUEST_CODE_CALL_PHONE
+                );
+                return;
+            }
+        }
+        this.callNow(phoneNumber);
+    }
+
+    private void callNow(String phoneNumber) {
+
+
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + phoneNumber));
+        try {
+            this.startActivity(callIntent);
+        } catch (Exception ex) {
+            Toast.makeText(getContext(),"Your call failed... " + ex.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        }
+    }
+
+    public void sendMail(String ownerid, String annonce){
+
+        userAdvertRef = FirebaseDatabase.getInstance().getReference().child(ownerid);
+        userAdvertRef.child("mail").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Object mailTest = snapshot.getValue();
+                if (mailTest != null){
+
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("message/rfc822");
+                    i.putExtra(Intent.EXTRA_EMAIL  , new String[]{(String)mailTest});
+                    i.putExtra(Intent.EXTRA_SUBJECT, "Achat " + annonce);
+                    i.putExtra(Intent.EXTRA_TEXT   , "Bonjour je suis trés intérréssé par votre annonce");
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+
+
+
+
 
 }

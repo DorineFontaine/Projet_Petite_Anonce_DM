@@ -229,7 +229,7 @@ public class ModifAnnonce extends Fragment {
                     }
 
 
-                    Advert advert = new Advert(title,price,localisation,des, type, etat);
+                    Advert advert = new Advert(title,price,localisation,des, type, etat,user.getUid());
                     dao.update(a.getKey(),hashMap).addOnSuccessListener(succ ->
                     {
                         //saving image in Firebase storage

@@ -242,9 +242,9 @@ public class AddFragment extends Fragment {
 
                     //add € to the price
                     price = price+" €";
+                    String ownerid = user.getUid().toString();
 
-
-                    Advert advert = new Advert(title,price,localisation,des, type, etat);
+                    Advert advert = new Advert(title,price,localisation,des, type, etat,ownerid);
                     dao.add(advert).addOnSuccessListener(succ ->
                     {
                         //saving image in Firebase storage

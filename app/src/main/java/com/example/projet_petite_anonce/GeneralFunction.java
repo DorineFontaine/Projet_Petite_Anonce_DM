@@ -50,6 +50,7 @@ public class GeneralFunction {
         result.putString("category", advert.getCategory());
         result.putString("description", advert.getDescription());
         result.putString("state", advert.getState());
+        result.putString("ownerid", advert.getOwnerid());
         result.putByteArray("image", image);
 
         fragmentManager.setFragmentResult(affiche?"affiche":"modif", result);
@@ -77,8 +78,9 @@ public class GeneralFunction {
         String category = bundle.getString("category");
         String description = bundle.getString("description");
         String state = bundle.getString("state");
+        String ownerid = bundle.getString("ownerid");
         byte[] image = bundle.getByteArray("image");
-        Advert a = new Advert(title, price, location, description, category, state);
+        Advert a = new Advert(title, price, location, description, category, state,ownerid);
         a.setKey(key);
         a.setDate(date);
         a.setImage(convert(image));

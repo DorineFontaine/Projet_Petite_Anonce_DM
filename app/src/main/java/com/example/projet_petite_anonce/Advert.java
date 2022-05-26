@@ -6,14 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Advert {
-    String key, title,ownername,price,location,date,category,description,contact, state;
+    String key, title, ownerid,price,location,date,category,description,contact, state;
     Bitmap image;
     /*
     Image is a bitmap
      */
 
 
-    public Advert(String title,String price,String location,String description, String category, String state){
+    public Advert(String title,String price,String location,String description, String category, String state, String ownerid){
 
         this.title = title;
         this.state = state;
@@ -21,7 +21,7 @@ public class Advert {
         this.price = price;
         this.location = location;
         this.description = description;
-
+        this.ownerid = ownerid;
         Date currentDate = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MMM/yyyy");
         this.date = dateFormat.format(currentDate).replace("/", "");
@@ -49,12 +49,12 @@ public class Advert {
         this.title = title;
     }
 
-    public String getOwnername() {
-        return ownername;
+    public String getOwnerid() {
+        return ownerid;
     }
 
-    public void setOwnername(String ownername) {
-        this.ownername = ownername;
+    public void setOwnerid(String ownerid) {
+        this.ownerid = ownerid;
     }
 
     public String getPrice() {
