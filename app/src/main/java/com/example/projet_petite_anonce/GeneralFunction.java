@@ -1,20 +1,44 @@
 package com.example.projet_petite_anonce;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentManager;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class GeneralFunction {
+
     /**
-     * Send advert to ParentFragmentManager to display it in AfficheFragment
-     * @param advert advert to display
+     *
+     * @param advert
+     * @param fragmentManager
+     * @param affiche if true then requestKey will be affiche else it will be modif
+     * @throws IOException
      */
-    public static void sendInfos(Advert advert, FragmentManager fragmentManager) throws IOException {
+    public static void sendInfos(Advert advert, FragmentManager fragmentManager, Boolean affiche) throws IOException {
 
         Bundle result = new Bundle();
         byte[] image = convert(advert.getImage());
@@ -28,7 +52,7 @@ public class GeneralFunction {
         result.putString("state", advert.getState());
         result.putByteArray("image", image);
 
-        fragmentManager.setFragmentResult("affiche", result);
+        fragmentManager.setFragmentResult(affiche?"affiche":"modif", result);
     }
 
     public static byte[] convert(Bitmap b) throws IOException {
@@ -61,4 +85,13 @@ public class GeneralFunction {
 
         return a;
     }
+
+    public static void selectImage(ActivityResultLauncher someActivityResultLauncher){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        someActivityResultLauncher.launch(intent);
+    }
+
+
+
 }

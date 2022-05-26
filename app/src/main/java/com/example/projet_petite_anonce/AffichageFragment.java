@@ -41,6 +41,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -142,6 +143,13 @@ public class AffichageFragment extends Fragment {
                                 share.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ModifAnnonce()).commit();
+
+                                        try {
+                                            GeneralFunction.sendInfos(a, getParentFragmentManager(), false);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         /**************************************************************************************/
                                     }
                                 });

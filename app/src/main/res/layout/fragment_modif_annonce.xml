@@ -1,14 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ModifAnnonce">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <RelativeLayout
+                android:id="@id/relative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fond1"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/modif_annonce"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="30dp"
+                    android:textSize="24sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_below="@id/relative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                >
+
+                <ImageButton
+                    android:id="@+id/imageAnnonce"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_baseline_add_circle_24"
+                    android:contentDescription="Photo du bien de l annonce" />
+
+                <TextView
+                    android:id="@+id/titreEnonce"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/imageAnnonce"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+
+                    android:text="@string/titreEnonce" />
+
+                <EditText
+                    android:id="@+id/editTextTitre"
+                    android:layout_below="@+id/titreEnonce"
+                    android:layout_width="match_parent"
+                    android:minHeight="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/edittext"
+                    android:drawablePadding="4dp"
+                    android:elevation="6dp"
+                    android:ems="10"
+                    android:hint="@string/titre"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:autofillHints="" />
+
+                <TextView
+                    android:id="@+id/typeEnonce"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/editTextTitre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/typeEnonce" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dropdown_menu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/typeEnonce"
+                    app:boxCornerRadiusBottomEnd="50dp"
+                    app:boxCornerRadiusBottomStart="50dp"
+                    app:boxCornerRadiusTopEnd="50dp"
+                    app:boxCornerRadiusTopStart="50dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    android:background="@drawable/edittext">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        tools:text="Livres"
+                        android:textColor="@color/purple_500"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etatEnonce"
+                    android:textStyle="bold"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/dropdown_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/etatEnonce" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_below="@+id/etatEnonce"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/neuf"
+                        android:text="@string/neuf"
+                        android:checked="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <RadioButton
+                        android:id="@+id/tresbon"
+                        android:text="@string/tresbon"
+                        android:checked="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <RadioButton
+                        android:id="@+id/bon"
+                        android:text="@string/bon"
+                        android:layout_width="wrap_content"
+                        android:checked="false"
+                        android:layout_height="wrap_content"/>
+                    <RadioButton
+                        android:id="@+id/satis"
+                        android:checked="false"
+                        android:text="@string/satif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/descriptionEnonce"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/descriptionEnonce" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/containerDescripiton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="200dp"
+                    android:layout_below="@+id/descriptionEnonce"
+                    app:counterEnabled="true"
+                    android:background="@null"
+                    app:counterMaxLength="500">
+
+                    <EditText
+                        android:id="@+id/editTextDescription"
+                        android:layout_below="@+id/descriptionEnonce"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="200dp"
+                        android:background="@drawable/edittext"
+                        android:drawablePadding="4dp"
+                        android:elevation="6dp"
+                        android:ems="10"
+                        android:hint="@string/descriptionExemple"
+                        android:inputType="textMultiLine"
+                        android:padding="8dp"
+                        android:maxLength="500"
+                        android:autofillHints=""
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/prixEnonce"
+                    android:textStyle="bold"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/containerDescripiton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prixEnonce" />
+
+                <EditText
+                    android:id="@+id/editTextPrix"
+                    android:layout_below="@+id/prixEnonce"
+                    android:layout_width="match_parent"
+                    android:minHeight="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/edittext"
+                    android:drawablePadding="4dp"
+                    android:elevation="6dp"
+                    android:ems="10"
+                    android:hint="@string/prix"
+                    android:inputType="number"
+                    android:padding="8dp"
+                    android:maxLength="500"
+                    android:autofillHints=""
+                    />
+
+                <TextView
+                    android:id="@+id/localisationEnonce"
+                    android:layout_marginTop="30dp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:layout_below="@+id/editTextPrix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/localisationEnonce" />
+
+
+
+
+                <EditText
+                    android:id="@+id/editTextLocalisation"
+                    android:layout_below="@+id/localisationEnonce"
+                    android:layout_width="match_parent"
+                    android:minHeight="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/edittext"
+                    android:drawablePadding="4dp"
+                    android:elevation="6dp"
+                    android:ems="10"
+                    android:hint="@string/localisationExemple"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:autofillHints=""
+                    android:maxLength="500"
+                    />
+                <Button
+                    android:id="@+id/btn_localisation"
+                    android:layout_margin="10dp"
+                    android:layout_below="@id/editTextLocalisation"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:backgroundTint="@color/saumon"
+                    android:text="@string/localiser"
+                    app:cornerRadius="50dp" />
+
+
+                <org.osmdroid.views.MapView
+                    android:id="@+id/map"
+                    android:layout_below="@+id/btn_localisation"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="300dp"/>
+
+                <Button
+                    android:id="@+id/btn_valider"
+                    android:layout_below="@id/map"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:backgroundTint="@color/saumon"
+                    android:text="@string/valider"
+                    app:cornerRadius="50dp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 </FrameLayout>

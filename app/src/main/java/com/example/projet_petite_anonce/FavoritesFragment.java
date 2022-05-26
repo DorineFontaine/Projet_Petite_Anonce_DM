@@ -297,7 +297,7 @@ public class FavoritesFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment()).commit();
 
                 try {
-                    GeneralFunction.sendInfos(adverts.get(i), getParentFragmentManager());
+                    GeneralFunction.sendInfos(adverts.get(i), getParentFragmentManager(), true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

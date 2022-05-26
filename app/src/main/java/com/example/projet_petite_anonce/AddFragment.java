@@ -157,7 +157,7 @@ public class AddFragment extends Fragment {
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectImage();
+                    GeneralFunction.selectImage(someActivityResultLauncher);
                     bitmap.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
                         @Override
                         public void onChanged(Bitmap newBitmap) {
@@ -282,12 +282,6 @@ public class AddFragment extends Fragment {
 
     }
 
-    public void selectImage(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        someActivityResultLauncher.launch(intent);
-    }
-
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -383,6 +377,7 @@ public class AddFragment extends Fragment {
 
 
     }
+
 
     @Override
     public void onPause(){
