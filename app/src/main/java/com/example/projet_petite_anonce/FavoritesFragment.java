@@ -1,8 +1,5 @@
 package com.example.projet_petite_anonce;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,20 +11,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,11 +43,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
+/**
+ * Displaying his favourites fragment in a list
+ */
 public class FavoritesFragment extends Fragment {
 
-    //Fragment qui permet l'affichage de la liste des articles enregistrée par l'utilisateur
-    //Permet de supprimer un élément de la liste
-    //Permet d'avoir accées à l'affichage de l'article
 
     FirebaseAuth mAuth ;
     ListView simpleList;
@@ -141,7 +135,7 @@ public class FavoritesFragment extends Fragment {
                     if(display == loading){
                         ProgressBar progressBar = view.findViewById(R.id.progressBar);
                         progressBar.setVisibility(View.GONE);
-                        displayList(inflater);
+                        displayList();
                     }
                 }
             });
@@ -186,13 +180,19 @@ public class FavoritesFragment extends Fragment {
                        display++;
                    }
 
+                   if(display == 0){
+                       ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                       progressBar.setVisibility(View.GONE);
+                   }
+
+
                    //Get all his adverts key  in Firebase
                    Consumer getAdvertKey = new Consumer<DataSnapshot>(){
                        public void accept(DataSnapshot snapshot2){
 
                            String aBuffer = snapshot2.getValue().toString();
                            keyAdverts.add(aBuffer);
-                       };
+                       }
                    };
 
                    snapshot.getChildren().forEach(getAdvertKey);
@@ -267,7 +267,10 @@ public class FavoritesFragment extends Fragment {
        return view;
     }
 
-    public void displayList(LayoutInflater inflater){
+    /**
+     * Displaying the list of adverts
+     */
+    public void displayList(){
 
         ville = new String[adverts.size()];
         prix = new String[adverts.size()];
@@ -305,6 +308,12 @@ public class FavoritesFragment extends Fragment {
         });
     }
 
+    /**
+     * We want to know if a key is in the list of keys
+     * @param key key to find
+     * @param keyList list of key
+     * @return boolean value
+     */
     public Boolean keyIsIn(String key , List<String> keyList){
         for (String keyBuffer : keyList) {
             if(key.equals(keyBuffer)){

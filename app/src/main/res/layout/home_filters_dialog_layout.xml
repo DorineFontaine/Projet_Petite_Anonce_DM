@@ -185,7 +185,7 @@
                     app:values="@array/initial_range_slider_values"
                     android:stepSize="100.0"  />
 
-                <!--Price-->
+                <!--location-->
                 <TextView
                     android:id="@+id/location"
                     android:layout_below="@+id/rangeSlider"
@@ -197,41 +197,31 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
 
-                <Button
-                    android:id="@+id/btn_clear"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/location"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="50dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_baseline_logout_24"
-                    android:drawableTint="@color/noirTransparent"
-                    android:shadowColor="@color/white"
-                    android:text="@string/reinitialiser"
-                    android:textColor="@color/grey" />
+                <!--Buttons-->
 
                 <Button
-                    android:id="@+id/btn_deconnexion"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
+                    android:id="@+id/btn_clear"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:text="@string/reinitialiser"
+                    android:textColor="@color/noir_transparent"
                     android:layout_below="@+id/location"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="50dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_baseline_logout_24"
-                    android:drawableTint="@color/noirTransparent"
-                    android:shadowColor="@color/white"
+                    />
+
+                <Button
+                    android:id="@+id/btn_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/btn_clear"
                     android:text="@string/rechercher"
-                    android:textColor="@color/grey" />
+                    android:textColor="@color/white"
+                    app:cornerRadius="50dp"
+                    android:backgroundTint="@color/saumon"
+                    android:layout_marginBottom="50dp"
+                    />
+
 
 
             </RelativeLayout>

@@ -6,20 +6,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,12 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-
+/**
+ * Showing a list of advert's user
+ */
 public class AnnonceFragment extends Fragment {
 
-    //Fragment qui permet d'afficher les annonces de l'utilisateur  dans le profil
-    //Permet de supprimer un élément de la liste
-    //Permet d'avoir accès à l'affichage de l'article
 
     ListView simpleList;
     View view;
@@ -87,7 +81,7 @@ public class AnnonceFragment extends Fragment {
                     if(display == loading){
                         ProgressBar progressBar = view.findViewById(R.id.progressBar);
                         progressBar.setVisibility(View.GONE);
-                        displayList(inflater);
+                        displayList();
                     }
                 }
             });
@@ -128,6 +122,11 @@ public class AnnonceFragment extends Fragment {
                         display++;
                     }
 
+                    if(display == 0){
+                        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.GONE);
+                    }
+
 
                     //Get all his adverts key  in Firebase
                     Consumer getAdvertKey = new Consumer<DataSnapshot>(){
@@ -135,7 +134,7 @@ public class AnnonceFragment extends Fragment {
 
                             String aBuffer = snapshot2.getValue().toString();
                             keyAdverts.add(aBuffer);
-                        };
+                        }
                     };
 
                     snapshot.getChildren().forEach(getAdvertKey);
@@ -217,7 +216,10 @@ public class AnnonceFragment extends Fragment {
         return view;
     }
 
-    public void displayList(LayoutInflater inflater){
+    /**
+     * Displaying the list of adverts
+     */
+    public void displayList(){
 
         ville = new String[myAdverts.size()];
         prix = new String[myAdverts.size()];
@@ -238,7 +240,7 @@ public class AnnonceFragment extends Fragment {
         simpleList = (ListView) view.findViewById(R.id.listview);
         CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, temps,photo,titre, R.layout.list_view_item);
         simpleList.setAdapter(customAdapter);
-        //On met un ecouteur sur chaque élément de la liste
+
         simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -253,6 +255,12 @@ public class AnnonceFragment extends Fragment {
         });
     }
 
+    /**
+     * We want to know if a key is in the list of keys
+     * @param key key to find
+     * @param keyList list of key
+     * @return boolean value
+     */
     public Boolean keyIsIn(String key , List<String> keyList){
         for (String keyBuffer : keyList) {
             if(key.equals(keyBuffer)){

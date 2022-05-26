@@ -1,33 +1,16 @@
 package com.example.projet_petite_anonce;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentManager;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.OverlayItem;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class GeneralFunction {
 
@@ -56,6 +39,12 @@ public class GeneralFunction {
         fragmentManager.setFragmentResult(affiche?"affiche":"modif", result);
     }
 
+    /**
+     * Converting a bitmap into a byte array
+     * @param b Bitmap
+     * @return byte array
+     * @throws IOException in case of an IOException
+     */
     public static byte[] convert(Bitmap b) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         b.compress(Bitmap.CompressFormat.PNG,100,stream);
@@ -64,10 +53,20 @@ public class GeneralFunction {
         return array;
     }
 
+    /**
+     * Convertinf a byte array into a bitmap
+     * @param array byte array
+     * @return bitmap
+     */
     public static Bitmap convert(byte[] array) {
         return BitmapFactory.decodeByteArray(array,0,array.length);
     }
 
+    /**
+     * Getting informations in Bundle
+     * @param bundle bundle
+     * @return A advert with all the informations
+     */
     public static Advert getInfos(Bundle bundle){
 
         String location = bundle.getString("location");
@@ -88,6 +87,10 @@ public class GeneralFunction {
         return a;
     }
 
+    /**
+     * Selecting an image in the phone
+     * @param someActivityResultLauncher you can find it in HomeFragment for example
+     */
     public static void selectImage(ActivityResultLauncher someActivityResultLauncher){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");

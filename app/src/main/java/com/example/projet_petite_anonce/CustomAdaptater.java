@@ -3,9 +3,6 @@ package com.example.projet_petite_anonce;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +12,12 @@ import android.widget.TextView;
 
 import com.google.firebase.database.PropertyName;
 
-
+/**
+ * CustomAdaptater, taking adverts informations
+ */
 public class CustomAdaptater extends BaseAdapter {
 
-    //Classe qui nous permet d'implementer nos liste
-
     public Context context;
-
-
-
     public String[] countryList;
     public String[] prixList;
     public String[] tempList;
@@ -33,7 +27,8 @@ public class CustomAdaptater extends BaseAdapter {
 
     public LayoutInflater inflater;
 
-    public CustomAdaptater(Context applicationContext, String[] countryList, String[] prixList, String[] tempList, Bitmap[] photoList, String[] titreList, int layout ) {
+
+    public CustomAdaptater(Context applicationContext, String[] countryList, String[] prixList, String[] tempList, Bitmap[] photoList, String[] titreList, int layout) {
 
         this.context = applicationContext;
         this.countryList = countryList;
@@ -43,10 +38,10 @@ public class CustomAdaptater extends BaseAdapter {
         this.titreList = titreList;
         this.layout = layout;
 
-
         inflater = (LayoutInflater.from(applicationContext));
 
     }
+
 
     @Override
     public int getCount() {
@@ -70,8 +65,9 @@ public class CustomAdaptater extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         view = inflater.inflate(layout, null);
+
+        //list view in Favorites or Annonces fragment
         if (layout == R.layout.list_view_item){
-            //view = View.inflate(context,R.layout.list_view_item,viewGroup);
 
             TextView country = (TextView) view.findViewById(R.id.ville);
             TextView temps = (TextView) view.findViewById(R.id.temps);
@@ -88,7 +84,7 @@ public class CustomAdaptater extends BaseAdapter {
 
 
         }else{
-            //view = View.inflate(context,R.layout.grid_view_item,viewGroup);
+            //For Home Fragment (gridview)
 
             TextView country = (TextView) view.findViewById(R.id.grid_ville);
             TextView temps = (TextView) view.findViewById(R.id.grid_temps);
@@ -100,16 +96,7 @@ public class CustomAdaptater extends BaseAdapter {
             prix.setText(prixList[i]);
             temps.setText(tempList[i]);
             titre.setText(titreList[i]);
-
-            //change size drawable ?
-
-            Bitmap icon = BitmapFactory.decodeResource(view.getResources(),R.drawable.robe);
-            //image.setImageBitmap(icon);
-
-            //image.setBackground(drawable);
-            //image.setImageDrawable(drawable);
             image.setImageBitmap(photoList[i]);
-
         }
 
 

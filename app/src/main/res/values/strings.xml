@@ -11,7 +11,7 @@
     <string name="connexion">Se connecter</string>
     <string name="mdp">Mot de passe</string>
     <string name="pa">Petite Anonce</string>
-    <string name="favorie">Favorie</string>
+    <string name="favorie">Favoris</string>
     <string name="filtre">Filtres</string>
     <string name="anonce">Mes Annonces</string>
     <string name="message">Mes Messages</string>
@@ -102,4 +102,5 @@
     <string name="connexionrequise">Il faut d\'abord se connecter (ou se créer un compte) :</string>
     <string name="reinitialiser">Réinitialiser</string>
     <string name="rechercher">Rechercher</string>
+    <string name="emptyAdvert">Il n\' y a aucune annonce de disponible.</string>
 </resources>

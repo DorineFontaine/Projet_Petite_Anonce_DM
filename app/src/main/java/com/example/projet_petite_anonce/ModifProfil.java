@@ -47,8 +47,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -165,8 +163,8 @@ public class ModifProfil extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     EditText editTextTel = view.findViewById(R.id.editTextNum);
                     Object telTest = snapshot.getValue();
-                    if( telTest != null){
-                        editTextTel.setHint((String)telTest);
+                    if(telTest != null){
+                        editTextTel.setHint(String.valueOf(telTest));
                     }
 
                 }

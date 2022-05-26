@@ -23,11 +23,9 @@ import android.view.ViewGroup;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
-
 
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -66,7 +64,9 @@ import java.util.List;
 import java.util.Locale;
 
 
-
+/**
+ * AddFragment : Add an advert if the user already signed in
+ */
 public class AddFragment extends Fragment {
 
 
@@ -85,9 +85,7 @@ public class AddFragment extends Fragment {
     Boolean location_validate;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add, container, false);
@@ -138,11 +136,12 @@ public class AddFragment extends Fragment {
             });
 
             linearLayout.addView(btn_connexion);
-
             frameLayout.addView(linearLayout);
             view = frameLayout;
 
         }else{
+
+            //if user had an account
 
             DAOPetiteAnnonce dao = new DAOPetiteAnnonce("Annonce", user.getUid());
             ArrayAdapter arrayAdapter = new ArrayAdapter(view.getContext(), R.layout.dropdown_item, getResources().getStringArray(R.array.categorie));
@@ -175,8 +174,8 @@ public class AddFragment extends Fragment {
             editTextPrice = view.findViewById(R.id.editTextPrix);
             typeTIL = view.findViewById(R.id.dropdown_menu);
             etatRG = view.findViewById(R.id.radioGroup);
-            //ADD
 
+            //validation button, every thing is required filed
             btn_valider.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view2) {
@@ -263,6 +262,11 @@ public class AddFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Saving a Bitmap with his Uri in Firebase
+     * @param view actual view to tell you user if operation doesnt success
+     * @param keyAdvert unique key of th advert
+     */
     public void saveBitmapFirebase(View view, String keyAdvert){
         //profil image
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("annonce/"+keyAdvert+"/");
@@ -282,6 +286,9 @@ public class AddFragment extends Fragment {
 
     }
 
+    /**
+     * Go pick up one image on the cellphone
+     */
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -305,30 +312,37 @@ public class AddFragment extends Fragment {
                 }
             });
 
+    /**
+     * Creating a map (where will be the advert)
+     */
     public void mapCreation(){
         Configuration.getInstance().load(getActivity().getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
 
         map = view.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
-        GeoPoint starPoint =new GeoPoint(43.610769 , 3.876716);//ma map est centrée sur montpellier
+        //map centered on Montpellier
+        GeoPoint starPoint =new GeoPoint(43.610769 , 3.876716);
         mapController = map.getController();
         mapController.setCenter(starPoint);
-        mapController.setZoom(13.0); //entre 0 et 25 nombre flotant FAUT JOUER AVEC LE ZOOM
+        mapController.setZoom(13.0);
 
-        //définition des boutons
+        //buttons definition
         Button btn_localisation = view.findViewById(R.id.btn_localisation);
         btn_localisation.setOnClickListener(view -> convertAddressToCoord());
 
     }
 
+    /**
+     * Converting address given by the user into coord if it exists
+     */
     public void convertAddressToCoord(){
 
-        //recuperer ce qui est dans l'edit text
+        //get user address
         EditText editText = view.findViewById(R.id.editTextLocalisation);
         String localisation = editText.getText().toString();
 
-        //recuperer les coordonnées de l'adresse
+        //get coord of the address
 
         try {
             Geocoder geocoder = new Geocoder(view.getContext(), Locale.FRENCH);
@@ -340,20 +354,20 @@ public class AddFragment extends Fragment {
             ArrayList<OverlayItem> items = new ArrayList<>();
             OverlayItem item = new OverlayItem("Mon annonce", address.getAddressLine(0), new GeoPoint(latitude, longitude));
 
-            //on change le style du marker
+            //maker style
             Drawable drawable = getActivity().getDrawable(R.drawable.ic_baseline_location_on_24);
             item.setMarker(drawable);
             items.add(item);
-            //on recentre la map sur le marker
+            //centering map on his address
             mapController.setCenter(new GeoPoint(latitude, longitude));
 
+            //to verify if address's user is validate by osm
             location_validate = true;
 
             ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(getActivity().getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 
                 @Override
                 public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                    //quand je clique dessus
                     return true;
                 }
 
@@ -363,7 +377,7 @@ public class AddFragment extends Fragment {
                 }
             });
 
-            //ca focus quand on clique dessus
+            //focus when clicked on
             mOverlay.setFocusItemsOnTap(true);
             map.getOverlays().add(mOverlay);
 

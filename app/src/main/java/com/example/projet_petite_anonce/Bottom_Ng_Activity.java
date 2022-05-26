@@ -3,19 +3,8 @@ package com.example.projet_petite_anonce;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -23,16 +12,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.Settings;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+/**
+ * Bottom menu to navigate in the app (our principal activity)
+ */
 public class Bottom_Ng_Activity extends AppCompatActivity {
 
-    //Activité principale
-    //Cette activité gére les changements de fragment au niveau de la bare de menu
 
     BottomNavigationView bottomNavigationView;
     private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 100;
@@ -48,11 +37,6 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-
-        //Creation d'un fragment
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
 
@@ -60,7 +44,6 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
         permissionDialog();
 
 
-        //En fonction de l'item de la barre de menu selectionné, on change de fragment
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -94,10 +77,9 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
 
 
     /**
-     * Demander la permission afin d'accéder aux fichiers du téléphone
+     * Asking permission to access on the phone (file)
      */
     public void permissionDialog() {
-        //nom du fichier qu'on veut prendre dans le dossier téléchargement/download
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(Bottom_Ng_Activity.this, Manifest.permission.INTERNET)) {

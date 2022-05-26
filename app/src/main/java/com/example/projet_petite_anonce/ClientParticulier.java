@@ -1,5 +1,8 @@
 package com.example.projet_petite_anonce;
 
+/**
+ * First type of client : ClientParticulier
+ */
 public class ClientParticulier {
 
     private String pseudo;
@@ -9,7 +12,6 @@ public class ClientParticulier {
     private String firstname;
     private String tel;
     private String picture;
-    private String client;
 
     public ClientParticulier(String name, String password, String mail, String tel){
         this.pseudo = name;
@@ -19,15 +21,6 @@ public class ClientParticulier {
         firstname = null;
         this.tel = tel;
         picture = null;
-        this.client = client;
-    }
-
-    public String getClient() {
-        return client;
-    }
-
-    public void setClient(String client) {
-        this.client = client;
     }
 
     public String getPassword() {

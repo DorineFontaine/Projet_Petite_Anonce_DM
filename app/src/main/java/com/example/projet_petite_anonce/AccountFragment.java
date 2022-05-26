@@ -4,10 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +25,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+/**
+ * AccountFragment is a fragment where you can signup
+ */
 public class AccountFragment extends Fragment {
-    Button signin_button;
 
+    Button signin_button;
     TextView inscription, psw_forgotten;
     EditText editText_mail, editText_psw;
     String mail, psw;
@@ -40,18 +40,14 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view;
-        view =  inflater.inflate(R.layout.fragment_account, container, false);
-
-
-
-        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_account, container, false);
 
         //check if user already signed in
         //check email and password with Firebase
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
+        //if user is already connected it will redirect you to Profil Fragment
         if(user != null){
            DatabaseReference userInformation = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(user.getUid());
             DatabaseReference client = userInformation.child("client");
@@ -88,13 +84,11 @@ public class AccountFragment extends Fragment {
             signin_button = view.findViewById(R.id.btn_connexion);
             psw_forgotten = view.findViewById(R.id.motdepasse);
 
-
             editText_mail = view.findViewById(R.id.editText_mail);
             editText_psw = view.findViewById(R.id.editText2_mail);
 
 
 
-            /*****************************************AUTHENTIFICATION *********************************************/
 
             psw_forgotten.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,6 +115,7 @@ public class AccountFragment extends Fragment {
                     mail = editText_mail.getText().toString();
                     psw = editText_psw.getText().toString();
 
+                    //if user filled mail and password
                     if(!(mail.isEmpty()||psw.isEmpty())){
 
                         mAuth.signInWithEmailAndPassword(mail, psw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -182,8 +177,6 @@ public class AccountFragment extends Fragment {
 
                 }
             });
-
-            //  page_inscription = new Intent(getActivity(), InscriptionActivity.class);
 
         }
 

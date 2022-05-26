@@ -11,18 +11,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+/**
+ * Add, update advert in Firebase RealTime Database
+ */
 public class DAOPetiteAnnonce {
-
 
         private DatabaseReference myRef;
         private DatabaseReference userRef;
-        private DatabaseReference databaseReference;
         private String key;
 
         public DAOPetiteAnnonce(String reference, String userUID){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             myRef = database.getReference(reference);
             userRef = null;
+
             //check which kind of user is it
             database.getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -50,8 +52,8 @@ public class DAOPetiteAnnonce {
             //Add the advert in ClientParticulier user myadvert list
             userRef.push().setValue(key);
             return keyRef.setValue(objet);
-
         }
+
         public String getKey(){return key;}
 
         public Task<Void> update(String key, HashMap<String,Object> hashMap){

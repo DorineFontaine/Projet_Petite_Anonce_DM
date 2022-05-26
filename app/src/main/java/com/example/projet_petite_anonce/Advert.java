@@ -5,12 +5,12 @@ import android.graphics.Bitmap;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Advert created by a user
+ */
 public class Advert {
     String key, title, ownerid,price,location,date,category,description,contact, state;
     Bitmap image;
-    /*
-    Image is a bitmap
-     */
 
 
     public Advert(String title,String price,String location,String description, String category, String state, String ownerid){

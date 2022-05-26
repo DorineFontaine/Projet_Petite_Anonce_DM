@@ -1,5 +1,8 @@
 package com.example.projet_petite_anonce;
 
+/**
+ * Second type of client : ClientProfessionnel
+ */
 public class ClientProfessionel {
     String nom_societe;
     String numero_siret;

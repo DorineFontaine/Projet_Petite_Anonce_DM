@@ -52,7 +52,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-
+/**
+ * Showing adverts's details
+ */
 public class AffichageFragment extends Fragment {
 
     ImageView imageAnonce;
@@ -68,7 +70,7 @@ public class AffichageFragment extends Fragment {
     DatabaseReference favRef;
     DatabaseReference userRef;
     DatabaseReference userAdvertRef;
-    Button contacter;
+    Button share;
 
 
     public AffichageFragment(){}
@@ -85,8 +87,9 @@ public class AffichageFragment extends Fragment {
         textPrix = view.findViewById(R.id.prix);
         textTitre = view.findViewById(R.id.titre);
         textDate = view.findViewById(R.id.date);
-        contacter = view.findViewById(R.id.btn_contacter);
+        share = view.findViewById(R.id.btn_contacter);
 
+        //when we received advert data
         getParentFragmentManager().setFragmentResultListener("affiche", this, (requestKey, bundle) -> {
             a = GeneralFunction.getInfos(bundle);
 
@@ -112,6 +115,7 @@ public class AffichageFragment extends Fragment {
 
             mapCreation(a.getLocation());
 
+            //if user have a account
             if(user != null){
                 userUID = user.getUid();
                 //fav and share/delete buttons (depends if this is his advert)
@@ -159,7 +163,6 @@ public class AffichageFragment extends Fragment {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-                                        /**************************************************************************************/
                                     }
                                 });
 
@@ -275,7 +278,7 @@ public class AffichageFragment extends Fragment {
 
         //Contact with the seller
 
-        contacter.setOnClickListener(new View.OnClickListener() {
+        share.setOnClickListener(new View.OnClickListener() {
 
 
 
@@ -375,15 +378,6 @@ public class AffichageFragment extends Fragment {
                             }
                         });
 
-
-
-
-
-
-
-
-
-
                     }
                 });
 
@@ -396,6 +390,9 @@ public class AffichageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Creating a map (where will be the advert)
+     */
     public void mapCreation(String localisation){
         Configuration.getInstance().load(getActivity().getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
 
@@ -412,9 +409,12 @@ public class AffichageFragment extends Fragment {
 
     }
 
+    /**
+     * Converting address given by the user into coord if it exists
+     */
     public void convertAddressToCoord(String localisation){
 
-        //recuperer les coordonnées de l'adresse
+        //get coord of the address
 
         try {
             Geocoder geocoder = new Geocoder(view.getContext(), Locale.FRENCH);
@@ -426,7 +426,7 @@ public class AffichageFragment extends Fragment {
             ArrayList<OverlayItem> items = new ArrayList<>();
             OverlayItem item = new OverlayItem("Mon annonce", address.getAddressLine(0), new GeoPoint(latitude, longitude));
 
-            //on change le style du marker
+            //maker style
             Drawable drawable = getActivity().getDrawable(R.drawable.ic_baseline_location_on_24);
             item.setMarker(drawable);
             items.add(item);
@@ -434,12 +434,10 @@ public class AffichageFragment extends Fragment {
             mapController.setCenter(new GeoPoint(latitude, longitude));
 
 
-
             ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(getActivity().getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 
                 @Override
                 public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                    //quand je clique dessus
                     return true;
                 }
 
@@ -449,7 +447,7 @@ public class AffichageFragment extends Fragment {
                 }
             });
 
-            //ca focus quand on clique dessus
+            //focus when clicked on
             mOverlay.setFocusItemsOnTap(true);
             map.getOverlays().add(mOverlay);
 
@@ -472,8 +470,9 @@ public class AffichageFragment extends Fragment {
     }
 
     /**
-     * snapshotUsers : all users
+     * Deleting advert from Favories directory of other users
      * @param snapshotUsers
+     * @param keyAdvert
      */
     public void deleteFav(DataSnapshot snapshotUsers, String keyAdvert){
         List<DatabaseReference> refToDelete = new ArrayList<>();
@@ -483,7 +482,6 @@ public class AffichageFragment extends Fragment {
                 //get the myFavAdverts from the user
                 if(snapshot2.hasChild("MyFavAdvert")){
 
-                    //List<String> favAdverts = (List<String>) snapshot2.child("MyFavAdverts").getValue();
                     Iterable<DataSnapshot> listFav = snapshot2.child("MyFavAdvert").getChildren();
 
                     for (DataSnapshot postSnapshot: listFav) {
@@ -500,6 +498,11 @@ public class AffichageFragment extends Fragment {
             toDelete.removeValue();
         }
     }
+
+    /**
+     * Permission to call advert's owner
+     * @param phoneNumber phone number of the owner
+     */
     private void askPermissionAndCall(String phoneNumber) {
 
         // With Android Level >= 23, you have to ask the user
@@ -522,6 +525,10 @@ public class AffichageFragment extends Fragment {
         this.callNow(phoneNumber);
     }
 
+    /**
+     * Calling advert's owner
+     * @param phoneNumber phone number of the owner
+     */
     private void callNow(String phoneNumber) {
 
 
@@ -536,25 +543,18 @@ public class AffichageFragment extends Fragment {
         }
     }
 
+    /**
+     * Sending a mail
+     * @param mail owner's mail
+     * @param annonce advert's owner
+     */
     public void sendMail(String mail, String annonce){
 
-
-                    Intent i = new Intent(Intent.ACTION_SEND);
-                    i.setType("message/rfc822");
-                    i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{(String)mail});
-                    i.putExtra(Intent.EXTRA_SUBJECT,"Achat " + annonce);
-                    startActivity(Intent.createChooser(i, "Bonjour je suis trés intérréssé par votre annonce..." ));
-
-
-
-
-
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{(String)mail});
+        i.putExtra(Intent.EXTRA_SUBJECT,"Achat " + annonce);
+        startActivity(Intent.createChooser(i, "Bonjour je suis trés intérréssé par votre annonce..." ));
 
     }
-
-
-
-
-
-
 }

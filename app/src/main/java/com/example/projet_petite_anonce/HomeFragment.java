@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -18,9 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -37,11 +33,9 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -58,7 +52,7 @@ public class HomeFragment extends Fragment {
     ImageView favoris;
     FirebaseAuth mAuth;
     FirebaseUser user;
-    View view;
+    View rootView;
     String[] ville;
     String[] prix;
     String[] date;
@@ -73,7 +67,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -84,21 +78,103 @@ public class HomeFragment extends Fragment {
             public void onChanged(Bitmap newBitmap) {
                 loading++;
                 if(display == loading){
-                    ProgressBar progressBar = view.findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.GONE);
-                    displayList(inflater);
+                    ProgressBar progressBar = rootView.findViewById(R.id.progressBar);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    displayList(inflater, adverts);
                 }
             }
         });
 
         //when he clicked on filters button
-        Button filters = view.findViewById(R.id.button3);
+        Button filters = rootView.findViewById(R.id.button3);
         filters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HomeFiltersDialog filtersDialog = new HomeFiltersDialog();
 
                 filtersDialog.show(getActivity().getSupportFragmentManager(), filtersDialog.getTag());
+
+                getParentFragmentManager().setFragmentResultListener("Reinitialiser", getViewLifecycleOwner(), (requestKey, bundle) -> {
+                    if(!adverts.isEmpty())
+                        displayList(inflater, adverts);
+
+                });
+
+                getParentFragmentManager().setFragmentResultListener("filter", getViewLifecycleOwner(), (requestKey, bundle) -> {
+                    boolean[] categories = (boolean[]) bundle.get("categories");
+                    boolean[] states = (boolean[]) bundle.get("states");
+                    String minPrice = (String) bundle.get("minPrice");
+                    String maxPrice = (String) bundle.get("maxPrice");
+
+                    //filtering adverts
+                    if(!adverts.isEmpty()){
+                        List<Advert> filteredAdverts = new ArrayList<>();
+
+                        //categories
+                        List<String> categoryfilter = new ArrayList<>();
+                        for(int iteration = 0; iteration <categories.length; iteration++){
+                            if(categories[iteration])
+                                categoryfilter.add(getResources().getStringArray(R.array.categorie)[iteration]);
+                        }
+
+                        //states
+                        List<String> statefilter = new ArrayList<>();
+                        if(states[0])
+                            statefilter.add("Neuf");
+                        if(states[1])
+                            statefilter.add("Très bon état");
+                        if(states[2])
+                            statefilter.add("Bon état");
+                        if(states[3])
+                            statefilter.add("Satisfaisant");
+
+                        float minP = Float.parseFloat(minPrice);
+                        float maxP = Float.parseFloat(maxPrice);
+
+                        if(categoryfilter.isEmpty() && statefilter.isEmpty() && minP == 0 && maxP == 1100 && !adverts.isEmpty()){
+                            displayList(inflater, adverts);
+
+                        }else{
+                            for(Advert a : adverts){
+                                float aPrice = Float.parseFloat(a.getPrice().replace(" €", ""));
+
+                                if(!categoryfilter.isEmpty() && categoryfilter.contains(a.getCategory())){
+                                    if(!statefilter.isEmpty() && statefilter.contains(a.getState()) ){
+                                        if(priceFiltered(maxP, minP, aPrice))
+                                            filteredAdverts.add(a);
+                                    }
+                                    else if (statefilter.isEmpty()){
+                                        if(priceFiltered(maxP, minP, aPrice))
+                                            filteredAdverts.add(a);
+                                    }
+                                }
+                                else if (categoryfilter.isEmpty()){
+                                    if(!statefilter.isEmpty() && statefilter.contains(a.getState()) ){
+                                        if(priceFiltered(maxP, minP, aPrice))
+                                            filteredAdverts.add(a);
+                                    }
+                                    else if (statefilter.isEmpty()){
+                                        if(priceFiltered(maxP, minP, aPrice))
+                                            filteredAdverts.add(a);
+                                    }
+                                }
+
+                            }
+
+
+                            Log.i("*****************FILTRAGE : ", String.valueOf(filteredAdverts.size()));
+
+                            if(!filteredAdverts.isEmpty())
+                                displayList(inflater, filteredAdverts);
+                            else{
+                                simpleList.setVisibility(View.INVISIBLE);
+                            }
+
+                        }
+                    }
+
+                });
+
             }
         });
 
@@ -150,6 +226,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                ProgressBar progressBar = rootView.findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+
                 Iterable<DataSnapshot> iterableSnapshot = snapshot.getChildren();
                 loading = 0;
                 display = 0;
@@ -165,55 +244,74 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-                Toast.makeText(view.getContext(), "NOOOOOOOOO", Toast.LENGTH_SHORT).show();
+                Toast.makeText(rootView.getContext(), "NOOOOOOOOO", Toast.LENGTH_SHORT).show();
                 //Design : Affichage un message au centre "Pas d'annonce disponible"
             }
         });
 
-        return view;
+        return rootView;
     }
 
-    public void displayList(LayoutInflater inflater){
+    public void displayList(LayoutInflater inflater, List<Advert> liste){
 
-        ville = new String[adverts.size()];
-        prix = new String[adverts.size()];
-        date= new String[adverts.size()];
-        titre= new String[adverts.size()];
-        photo= new Bitmap[adverts.size()];
+        //clean GridView
 
-        //Créer la liste des éléments d'advert
-        for(int i = 0; i < adverts.size(); i++){
-            Advert a = adverts.get(i);
-            ville[i] = a.getLocation();
-            prix[i] = a.getPrice();
-            date[i] = a.getDate();
-            titre[i] = a.getTitle();
-            photo[i] = a.getImage();
-        }
-        // Implementation de la liste de message
-        simpleList = (GridView) view.findViewById(R.id.grid_view);
+        Log.i("*****************Taille du filtrage : ", String.valueOf(liste.size()));
 
-        View viewTest = view = inflater.inflate(R.layout.grid_view_item,(ViewGroup) simpleList.getParent(), false);
+            ville = new String[liste.size()];
+            prix = new String[liste.size()];
+            date= new String[liste.size()];
+            titre= new String[liste.size()];
+            photo= new Bitmap[liste.size()];
 
-        CustomAdaptater customAdapter = new CustomAdaptater(view.getContext(), ville, prix, date,photo,titre, R.layout.grid_view_item);
-
-        simpleList.setAdapter(customAdapter);
-
-        //On met un ecouteur sur chaque élément de la liste
-        simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment()).commit();
-
-                try {
-                    GeneralFunction.sendInfos(adverts.get(i), getParentFragmentManager(), true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+            //Créer la liste des éléments d'advert
+            for(int i = 0; i < liste.size(); i++){
+                Advert a = liste.get(i);
+                ville[i] = a.getLocation();
+                prix[i] = a.getPrice();
+                date[i] = a.getDate();
+                titre[i] = a.getTitle();
+                photo[i] = a.getImage();
+                Log.i("Adverts affichage", ville[i]);
+                Log.i("Adverts affichage", prix[i]);
+                Log.i("Adverts affichage", date[i]);
+                Log.i("Adverts affichage", titre[i]);
             }
-        });
+            // Implementation de la liste de message
+            simpleList = (GridView) rootView.findViewById(R.id.grid_view);
+
+
+            CustomAdaptater customAdapter = new CustomAdaptater(rootView.getContext(), ville, prix, date,photo,titre, R.layout.grid_view_item);
+
+            simpleList.setVisibility(View.VISIBLE);
+            simpleList.setAdapter(customAdapter);
+
+            //On met un ecouteur sur chaque élément de la liste
+            simpleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AffichageFragment()).commit();
+
+                    try {
+                        GeneralFunction.sendInfos(liste.get(i), getParentFragmentManager(), true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+
+    }
+
+    public Boolean priceFiltered(float maxP, float minP, float aPrice){
+        if(maxP == 2500 && aPrice >= minP)
+            return true;
+        else if(aPrice <= maxP && aPrice >= minP)
+            return true;
+        else
+            return false;
     }
 
 

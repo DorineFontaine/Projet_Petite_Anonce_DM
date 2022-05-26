@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -70,9 +69,6 @@ public class InscriptionProffessionelFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-
-
-                /*************************************************ICI CHANGER LES SETERROR AVEC REQUISEMAIL,REQUISMDP etc ...***************/
                 mail = edittext_mail.getText().toString();
                 password = edittext_psw.getText().toString();
                 nom_societe = edittext_nom_societe.getText().toString();
