@@ -242,7 +242,7 @@ public class AddFragment extends Fragment {
 
                     //add € to the price
                     price = price+" €";
-                    String ownerid = user.getUid().toString();
+                    String ownerid = user.getUid();
 
                     Advert advert = new Advert(title,price,localisation,des, type, etat,ownerid);
                     dao.add(advert).addOnSuccessListener(succ ->

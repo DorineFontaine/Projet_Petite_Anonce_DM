@@ -10,112 +10,124 @@
     tools:context=".AddFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="150dp"
-        android:foregroundGravity="center"
-        android:gravity="center_horizontal"
-        android:text="@string/bienvenu"
-        android:textColor="@color/noir_transparent"
-        android:textSize="24sp" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editText_SIRET"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginBottom="45dp"
-        android:background="@drawable/edittext"
-        android:drawablePadding="4dp"
-        android:elevation="6dp"
-        android:ems="10"
-        android:hint="@string/siret"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/editText_mail"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/edittext"
-        android:drawablePadding="4dp"
-        android:elevation="6dp"
-        android:ems="10"
-        android:hint="@string/mail"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="200dp"
+                android:layout_marginBottom="50dp"
+                android:foregroundGravity="center"
+                android:gravity="center_horizontal"
+                android:text="@string/bienvenu"
+                android:textColor="@color/noir_transparent"
+                android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/editText_mdp"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/edittext"
-        android:drawablePadding="4dp"
-        android:elevation="6dp"
-        android:ems="10"
-        android:hint="@string/mdp"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="8dp"
-        android:password="true" />
+            <EditText
+                android:id="@+id/editText_SIRET"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/edittext"
+                android:drawablePadding="4dp"
+                android:elevation="6dp"
+                android:ems="10"
+                android:hint="@string/siret"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="8dp" />
 
-    <EditText
-        android:id="@+id/editText_nom_de_societe"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="125dp"
-        android:background="@drawable/edittext"
-        android:drawablePadding="4dp"
-        android:elevation="6dp"
-        android:ems="10"
-        android:hint="@string/nom_societe"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="8dp"
-        android:password="false" />
+            <EditText
+                android:id="@+id/editText_mail"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext"
+                android:drawablePadding="4dp"
+                android:elevation="6dp"
+                android:ems="10"
+                android:hint="@string/mail"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="8dp" />
 
-    <EditText
-        android:id="@+id/editTextTel"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="180dp"
-        android:background="@drawable/edittext"
-        android:drawablePadding="4dp"
-        android:elevation="6dp"
-        android:ems="10"
-        android:hint="@string/tel"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:padding="8dp" />
+            <EditText
+                android:id="@+id/editText_mdp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext"
+                android:drawablePadding="4dp"
+                android:elevation="6dp"
+                android:ems="10"
+                android:hint="@string/mdp"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:password="true" />
 
-    <Button
-        android:id="@+id/btn2_inscription"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="270dp"
-        android:backgroundTint="@color/saumon"
-        android:text="@string/inscription"
-        app:cornerRadius="50dp" />
+            <EditText
+                android:id="@+id/editText_nom_de_societe"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext"
+                android:drawablePadding="4dp"
+                android:elevation="6dp"
+                android:ems="10"
+                android:hint="@string/nom_societe"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:password="false" />
 
-    <Switch
-        android:id="@+id/switch2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="225dp"
-        android:checked="true"
-        android:text="@string/professionel" />
+            <EditText
+                android:id="@+id/editTextTel"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext"
+                android:drawablePadding="4dp"
+                android:elevation="6dp"
+                android:ems="10"
+                android:hint="@string/tel"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="8dp" />
+
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:checked="true"
+                android:minHeight="48dp"
+                android:text="@string/professionel" />
+
+            <Button
+                android:id="@+id/btn2_inscription"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/saumon"
+                android:text="@string/inscription"
+                app:cornerRadius="50dp" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </FrameLayout>

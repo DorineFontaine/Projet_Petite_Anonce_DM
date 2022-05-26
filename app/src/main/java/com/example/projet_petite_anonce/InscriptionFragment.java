@@ -84,6 +84,11 @@ public class InscriptionFragment extends Fragment {
                     edittext_mail.requestFocus();
                     return;
                 }
+                if(tel.isEmpty()){
+                    edittext_tel.setError(getResources().getString(R.string.telRequis));
+                    edittext_tel.requestFocus();
+                    return;
+                }
 
 
                 if(password.isEmpty()){

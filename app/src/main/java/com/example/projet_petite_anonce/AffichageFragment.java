@@ -70,6 +70,7 @@ public class AffichageFragment extends Fragment {
     DatabaseReference userAdvertRef;
     Button contacter;
 
+
     public AffichageFragment(){}
 
 
@@ -275,8 +276,37 @@ public class AffichageFragment extends Fragment {
         //Contact with the seller
 
         contacter.setOnClickListener(new View.OnClickListener() {
+
+
+
             @Override
             public void onClick(View view) {
+
+                String ownerid = a.getOwnerid();
+                String annonce = a.getTitle();
+                Log.d("OWNERID" ,ownerid);
+                //we want to know if he is a ClientParticulier or ClientProfessionnel
+                userAdvertRef = null;
+                //check which kind of user is it
+                FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild(ownerid))
+                            userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(ownerid);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) { }
+                });
+
+                if(userAdvertRef == null)
+                    userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(ownerid);
+
+
+
+
+
+
                 //the user can choose to contact the seller by email or telephone
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
@@ -285,37 +315,16 @@ public class AffichageFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
 
-                        String ownerid = a.getOwnerid();
-                        String annonce = a.getTitle();
-                        Log.d("OWNERID" ,ownerid);
-
-
-                        //we want to know if he is a ClientParticulier or ClientProfessionnel
-                        userAdvertRef = null;
-                        //check which kind of user is it
-                        FirebaseDatabase.getInstance().getReference("ClientParticulier").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.hasChild(ownerid))
-                                    userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientParticulier").child(ownerid);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) { }
-                        });
-
-                        if(userAdvertRef == null)
-                            userAdvertRef = FirebaseDatabase.getInstance().getReference("ClientProfessionnel").child(ownerid);
 
                         userAdvertRef.child("tel").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                String telTest = snapshot.getValue().toString();
+                               Object telTest = snapshot.getValue();
 
                                 if (telTest != null) {
                                     Log.d("TELEPHONE","j ai un  tel ");
-                                    askPermissionAndCall(telTest);
+                                    askPermissionAndCall((String) telTest);
                                 } else {
                                     Log.d("TELEPHONE","je n'est pas de tel ");
                                     sendMail(ownerid,annonce);
@@ -342,9 +351,38 @@ public class AffichageFragment extends Fragment {
                 alertDialogBuilder.setNegativeButton(R.string.Pmail,new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String ownerid = a.getOwnerid();
-                        String annonce = a.getTitle();
-                        sendMail(ownerid, annonce);
+
+
+
+                        userAdvertRef.child("mail").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                Object mailTest = snapshot.getValue();
+
+                                if (mailTest != null) {
+                                    Log.d("TELEPHONE","j ai un  mail ");
+                                    sendMail((String) mailTest,annonce);
+                                }
+                            }
+
+
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
+
+
+
+
+
+
 
                     }
                 });
@@ -498,31 +536,18 @@ public class AffichageFragment extends Fragment {
         }
     }
 
-    public void sendMail(String ownerid, String annonce){
+    public void sendMail(String mail, String annonce){
 
-        userAdvertRef = FirebaseDatabase.getInstance().getReference().child(ownerid);
-        userAdvertRef.child("mail").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                Object mailTest = snapshot.getValue();
-                if (mailTest != null){
 
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("message/rfc822");
-                    i.putExtra(Intent.EXTRA_EMAIL  , new String[]{(String)mailTest});
-                    i.putExtra(Intent.EXTRA_SUBJECT, "Achat " + annonce);
-                    i.putExtra(Intent.EXTRA_TEXT   , "Bonjour je suis trés intérréssé par votre annonce");
+                    i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{(String)mail});
+                    i.putExtra(Intent.EXTRA_SUBJECT,"Achat " + annonce);
+                    startActivity(Intent.createChooser(i, "Bonjour je suis trés intérréssé par votre annonce..." ));
 
-                }
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
 
 
     }

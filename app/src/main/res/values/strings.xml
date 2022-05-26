@@ -60,6 +60,7 @@
         <item>Multimédia</item>
     </string-array>
     <string name="localiser">Localiser l\'annonce</string>
+    <string name="telRequis">Numéro de téléphone requis !</string>
     <string name="sup">Supprimez !</string>
     <string name="bienvenu">Bienvenue</string>
     <string name="annonce">Annonces</string>
