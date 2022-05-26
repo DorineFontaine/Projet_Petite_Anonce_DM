@@ -11,13 +11,13 @@ public class ClientParticulier {
     private String picture;
     private String client;
 
-    public ClientParticulier(String name, String password, String mail){
+    public ClientParticulier(String name, String password, String mail, String tel){
         this.pseudo = name;
         this.password = password;
         this.mail = mail;
         lastname = null;
         firstname = null;
-        tel = null;
+        this.tel = tel;
         picture = null;
         this.client = client;
     }

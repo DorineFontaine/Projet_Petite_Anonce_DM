@@ -153,7 +153,8 @@
                     android:layout_marginTop="30dp"
                     android:backgroundTint="@color/saumon"
                     android:text="@string/modif"
-                    app:cornerRadius="50dp" />
+                    app:cornerRadius="50dp"
+                    android:layout_marginBottom="50dp"/>
 
             </RelativeLayout>
         </RelativeLayout>

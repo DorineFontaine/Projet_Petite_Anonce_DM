@@ -5,34 +5,29 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"
+        android:title="@string/accueil"
         android:visible="true"
         />
 
     <item
         android:id="@+id/nav_favorites"
         android:icon="@drawable/ic_baseline_grade_24"
-        android:title="Favorites"
+        android:title="@string/favorie"
         android:visible="true"
        />
 
     <item
         android:id="@+id/nav_add"
         android:icon="@drawable/ic_baseline_add_circle_24"
-        android:title="Add"
+        android:title="@string/ajout"
         android:visible="true"
         />
-    <item
-        android:id="@+id/nav_message"
-        android:icon="@drawable/ic_baseline_message_24"
-        android:title="Favorites"
-        android:visible="true"
-        />
+
 
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/ic_baseline_account_circle_24"
-        android:title="Add"
+        android:title="@string/compte"
         android:visible="true"
        />
 

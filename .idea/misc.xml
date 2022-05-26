@@ -28,13 +28,24 @@
         <entry key="..\:/Users/26269/Desktop/Master IASD/S2/Dev Mobile/echauffement/Projet_Petite_anonce/app/src/main/res/menu/b_navigation.xml" value="0.1" />
         <entry key="..\:/Users/26269/Desktop/Master IASD/S2/Dev Mobile/echauffement/Projet_Petite_anonce/app/src/main/res/menu/bottom_navigation.xml" value="0.25" />
         <entry key="..\:/Users/26269/Desktop/Master IASD/S2/Dev Mobile/echauffement/Projet_Petite_anonce/app/src/main/res/menu/navigation.xml" value="0.2" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/activity_bottom_ng.xml" value="0.1" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_account.xml" value="0.25" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_affichage.xml" value="0.1" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_annonce.xml" value="0.25" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_discuss.xml" value="0.4" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_favorites.xml" value="0.1" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_inscription.xml" value="0.264" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_inscription_proffessionel.xml" value="0.4" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_message.xml" value="0.21331521739130435" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_modif_profil_professionnel.xml" value="0.25" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_profil.xml" value="0.1" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_profil_professionel.xml" value="0.13179347826086957" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/fragment_profil_professionnel.xml" value="0.37948717948717947" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/grid_view_item.xml" value="0.1" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/list_view_item.xml" value="0.264" />
+        <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/layout/messages_adaptater_layout.xml" value="0.1" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/menu/b_navigation.xml" value="0.536" />
         <entry key="..\:/Users/26269/Desktop/Petit_Anonce/app/src/main/res/menu/navigation.xml" value="0.1" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/drawable/bottomnavigation_view_colored.xml" value="0.1" />
@@ -50,9 +61,7 @@
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_favorites.xml" value="0.13125" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_modif_profil.xml" value="0.6733870967741935" />
-        <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_modification_anonce.xml" value="0.4" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_profil.xml" value="0.1" />
-        <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/fragment_profil_professionnel.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/grid_view_item.xml" value="0.22760416666666666" />
         <entry key="..\:/Users/rmrsm/OneDrive/Bureau/M1/S2/prog_mobile/Projet_Petite_Anonce_DM/app/src/main/res/layout/list_view_item.xml" value="0.25416666666666665" />
       </map>

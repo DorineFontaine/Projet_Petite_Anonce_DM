@@ -201,18 +201,21 @@
 
             <Button
                 android:id="@+id/btn_deconnexion"
-                android:drawableLeft="@drawable/ic_baseline_logout_24"
-                android:drawableTint="@color/noirTransparent"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_below="@+id/viewDivider4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/viewDivider4"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                android:shadowColor="@color/white"
-                android:textColor="@color/grey"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="50dp"
                 android:backgroundTint="@color/white"
-                android:text="@string/deconnexion" />
+                android:drawableLeft="@drawable/ic_baseline_logout_24"
+                android:drawableTint="@color/noirTransparent"
+                android:shadowColor="@color/white"
+                android:text="@string/deconnexion"
+                android:textColor="@color/grey" />
 
         </RelativeLayout>
 

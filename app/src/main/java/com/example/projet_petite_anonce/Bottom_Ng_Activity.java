@@ -76,9 +76,6 @@ public class Bottom_Ng_Activity extends AppCompatActivity {
                     case R.id.nav_favorites:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavoritesFragment()).commit();
                         break;
-                    case R.id.nav_message:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessageFragment()).commit();
-                        break;
                     case R.id.nav_add:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddFragment()).commit();
                         break;

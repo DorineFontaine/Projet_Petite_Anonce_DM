@@ -6,13 +6,23 @@ public class ClientProfessionel {
     String mail;
     String psw;
     String client;
+    String tel;
 
-    public ClientProfessionel(String nom_societe, String numero_siret, String mail, String psw, String client){
+    public ClientProfessionel(String nom_societe, String numero_siret, String mail, String psw, String client, String tel){
         this.nom_societe = nom_societe;
         this.numero_siret = numero_siret;
         this.mail = mail;
         this.psw = psw;
         this.client = client;
+        this.tel = tel;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 
     public String getNom_societe() {

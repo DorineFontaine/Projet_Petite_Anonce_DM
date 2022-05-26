@@ -27,13 +27,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class InscriptionProffessionelFragment extends Fragment {
 
-    EditText edittext_mail, edittext_psw, edittext_siret, edittext_nom_societe;
+    EditText edittext_mail, edittext_psw, edittext_siret, edittext_nom_societe, edittext_tel;
     Button submit;
     String mail;
     String password;
     String nom_societe;
     String siret;
     String client;
+    String tel;
     FirebaseAuth mAuth;
 
 
@@ -46,6 +47,7 @@ public class InscriptionProffessionelFragment extends Fragment {
         edittext_psw = view.findViewById(R.id.editText_mdp);
         edittext_nom_societe = view.findViewById(R.id.editText_nom_de_societe);
         edittext_siret = view.findViewById(R.id.editText_SIRET);
+        edittext_tel  = view.findViewById(R.id.editTextTel);
         submit = view.findViewById(R.id.btn2_inscription);
         client = "1";
         Switch mySwitch = view.findViewById(R.id.switch2);
@@ -75,6 +77,7 @@ public class InscriptionProffessionelFragment extends Fragment {
                 password = edittext_psw.getText().toString();
                 nom_societe = edittext_nom_societe.getText().toString();
                 siret = edittext_siret.getText().toString();
+                tel = edittext_tel.getText().toString();
 
                 if(mail.isEmpty()){
                     edittext_mail.setError(getResources().getString(R.string.requisEmail));
@@ -119,7 +122,7 @@ public class InscriptionProffessionelFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientProfessionel clientProfessionel = new ClientProfessionel(nom_societe,siret,mail,password,client);
+                                    ClientProfessionel clientProfessionel = new ClientProfessionel(nom_societe,siret,mail,password,client,tel);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientProfessionnel")
                                             .child(user)

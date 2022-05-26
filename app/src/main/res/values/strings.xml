@@ -11,10 +11,19 @@
     <string name="connexion">Se connecter</string>
     <string name="mdp">Mot de passe</string>
     <string name="pa">Petite Anonce</string>
-    <string name="favorie">Favoris</string>
+    <string name="favorie">Favorie</string>
     <string name="filtre">Filtre</string>
     <string name="anonce">Mes Annonces</string>
     <string name="message">Mes Messages</string>
+
+    <string name="tel">Numéro de téléphone</string>
+    <string name="Pmail">Par mail</string>
+    <string name="Ptel">Par téléphone</string>
+    <string name="contact_vendeur">Comment voulez-vous contactez le vendeur?</string>
+
+    <string name="accueil">Accueil</string>
+    <string name="ajout">Ajout</string>
+    <string name="compte">Compte</string>
 
     <string name="titreAdd">Déposer votre annonce</string>
     <string name="titreEnonce">Quel est le titre de l\'annonce ?</string>

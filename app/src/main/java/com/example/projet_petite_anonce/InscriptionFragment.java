@@ -30,9 +30,9 @@ public class InscriptionFragment extends Fragment {
 
     //Create profil and store them in Firebase
 
-    EditText edittext_mail, edittext_psw, edittext_pseudo;
+    EditText edittext_mail, edittext_psw, edittext_pseudo, edittext_tel;
     Button submit;
-    String mail, password, pseudo,client;
+    String mail, password, pseudo,client,tel;
     FirebaseAuth mAuth;
     Switch mySwitch;
 
@@ -46,6 +46,7 @@ public class InscriptionFragment extends Fragment {
         edittext_mail = view.findViewById(R.id.editText2_mail);
         edittext_pseudo = view.findViewById(R.id.editText_pseudo);
         edittext_psw = view.findViewById(R.id.editText2_mdp);
+        edittext_tel = view.findViewById(R.id.editText_tel);
         submit = view.findViewById(R.id.btn_inscription);
         mySwitch = view.findViewById(R.id.switch1);
         client = "0";
@@ -76,6 +77,7 @@ public class InscriptionFragment extends Fragment {
                 mail = edittext_mail.getText().toString();
                 password = edittext_psw.getText().toString();
                 pseudo = edittext_pseudo.getText().toString();
+                tel = edittext_tel.getText().toString();
 
                 if(mail.isEmpty()){
                     edittext_mail.setError(getResources().getString(R.string.requisEmail));
@@ -115,7 +117,7 @@ public class InscriptionFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail);
+                                    ClientParticulier clientParticulier = new ClientParticulier(pseudo,password,mail,tel);
                                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     FirebaseDatabase.getInstance().getReference("ClientParticulier")
                                             .child(user)

@@ -234,7 +234,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="50dp"
                 android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_baseline_logout_24"
                 android:drawableTint="@color/noirTransparent"
