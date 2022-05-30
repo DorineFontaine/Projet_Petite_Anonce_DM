@@ -28,4 +28,9 @@ Afin de pouvoir avoir une experience optimale de l'application, vous avez le cho
 /!\ La fonctionnalité de favoris n'est pas disponnible pour le client particulier  
  
 
- 
+##Permission
+
+Vous avez plusieurs permission à accorder à l'application : 
+  - permission d'accée à internet (nécéssaire pour que l'application fonctionne)
+  - permission d'appel (nécéssaire pour contacter le vendeur)
+  - permission d'accées à la boite mail (nécéssaire pour contacter le vendeur)
