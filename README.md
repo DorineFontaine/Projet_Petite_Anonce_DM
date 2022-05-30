@@ -12,13 +12,13 @@ Pour pouvoir tester notre application nous vous invitons à suivre les  étapes 
 
 Afin de pouvoir avoir une experience optimale de l'application, vous avez le choix entre vous inscrire ou vous connecter avec les codes suivant :
  Pour un client particulier : 
+ 
       mail : dodo@mail.com
-      
       mot de passe : 123456
       
  Pour un client professionnel : 
-      mail : dodo@mail.com
-      
+ 
+      mail : lulu@gmail.com
       mot de passe : 123456
  
  ## Ajout d'un favoris 
@@ -31,6 +31,7 @@ Afin de pouvoir avoir une experience optimale de l'application, vous avez le cho
 ##Permission
 
 Vous avez plusieurs permission à accorder à l'application : 
+
   - permission d'accée à internet (nécéssaire pour que l'application fonctionne)
   - permission d'appel (nécéssaire pour contacter le vendeur)
   - permission d'accées à la boite mail (nécéssaire pour contacter le vendeur)
