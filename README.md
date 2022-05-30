@@ -35,3 +35,7 @@ Vous avez plusieurs permission à accorder à l'application :
   - permission d'accée à internet (nécéssaire pour que l'application fonctionne)
   - permission d'appel (nécéssaire pour contacter le vendeur)
   - permission d'accées à la boite mail (nécéssaire pour contacter le vendeur)
+
+## Modification du profil
+
+La modification du profil fonctionne pour le client particulier mais nécèssite quelque amélioration pour le client professionnel (nous vous invitons donc à tester cette fonctionnalité plutôt sur le profil client particulier).
