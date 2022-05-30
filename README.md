@@ -24,5 +24,5 @@ Afin de pouvoir avoir une experience optimale de l'application, vous avez le cho
  Pour ajouter un article en favoris, il vous faut selectionner l'annonce en cliquant droit sur celle-ci. Une fois affichée en plein écran, cliquez sur le coeur en bas de la photo. 
  /!\ La fonctionnalité de favoris n'est pas disponnible pour le client particulier  
  
- #Modification d'annonce 
+
  
